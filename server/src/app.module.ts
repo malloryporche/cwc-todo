@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 import { DataSource } from 'typeorm';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
-import { User } from './entity/User';
+import { User } from './user/user.entity';
 
 dotenv.config();
 
