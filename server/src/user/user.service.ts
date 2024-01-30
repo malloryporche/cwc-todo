@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DeleteResult } from 'typeorm';
 import { User } from './user.entity';
 
 @Injectable()
@@ -10,19 +10,34 @@ export class UserService {
     private usersRepository: Repository<User>,
   ) {}
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  async findAll(): Promise<User[]> {
+    return await this.usersRepository.find();
   }
 
-  create(user) {}
-
-  findOne(id: number): Promise<User | null> {
-    return this.usersRepository.findOneBy({ id });
+  async create(user): Promise<User> {
+    return await this.usersRepository.save(user);
   }
 
-  updateUser(id, body) {}
+  async findOne(id: number): Promise<User | null> {
+    const user = await this.usersRepository.findOneBy({ id });
+    return user || null;
+  }
 
-  async delete(id: number): Promise<void> {
+  async updateUser(id: number, body: Partial<User>): Promise<User> {
+    let userToUpdate = await this.usersRepository.findOneBy({ id });
+    userToUpdate = { ...userToUpdate, ...body };
+    return await this.usersRepository.save(userToUpdate);
+  }
+
+  async delete(id: number): Promise<User | null> {
+    const userToDelete = await this.usersRepository.findOneBy({ id });
+
+    if (!userToDelete) {
+      throw new Error(`User with ID ${id} not found`);
+    }
+
     await this.usersRepository.delete(id);
+
+    return userToDelete;
   }
 }
