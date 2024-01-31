@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DeleteResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -29,6 +29,7 @@ export class UserService {
   }
 
   async findOneWithUsername(email: string): Promise<User | null> {
+    console.log('hi');
     const user = await this.usersRepository.findOneBy({ email });
     return user || null;
   }

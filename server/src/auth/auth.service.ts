@@ -3,17 +3,16 @@ import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/user/user.entity';
-import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
-  private readonly logger = new Logger(AuthService.name);
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
   ) {}
 
   async validateUser(email: string, pass: string) {
+    console.log('hi');
     const user = await this.userService.findOneWithUsername(email);
     if (user && (await bcrypt.compare(pass, user.pass))) {
       const { pass, ...result } = user;
@@ -23,7 +22,6 @@ export class AuthService {
   }
 
   async login(user: User) {
-    this.logger.log('hi');
     const payload = {
       email: user.email,
       sub: {

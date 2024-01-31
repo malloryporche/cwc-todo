@@ -8,7 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../user/user.entity';
 
 @Module({
-  providers: [UserService, AuthService, JwtService, LocalStrategy],
+  providers: [AuthService, UserService, JwtService, LocalStrategy],
   controllers: [AuthController],
   imports: [
     JwtModule.register({

@@ -7,9 +7,11 @@ import { DataSource } from 'typeorm';
 import { UserModule } from './user/user.module';
 import { User } from './user/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { ListModule } from './list/list.module';
+import { TodoModule } from './todo/todo.module';
 
 dotenv.config();
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -24,6 +26,11 @@ dotenv.config();
     }),
     UserModule,
     AuthModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    ListModule,
+    TodoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
