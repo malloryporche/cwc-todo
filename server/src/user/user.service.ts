@@ -23,6 +23,13 @@ export class UserService {
     return user || null;
   }
 
+  async findOneWithUsername(username: string): Promise<User | null> {
+    return await this.usersRepository.findOne({
+      where: {
+        email: username,
+      },
+    });
+  }
   async updateUser(id: number, body: Partial<User>): Promise<User> {
     let userToUpdate = await this.usersRepository.findOneBy({ id });
     userToUpdate = { ...userToUpdate, ...body };
