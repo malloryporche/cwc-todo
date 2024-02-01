@@ -29,9 +29,7 @@ export class UserService {
   }
 
   async findOneWithUsername(email: string): Promise<User | null> {
-    console.log('hi');
-    const user = await this.usersRepository.findOneBy({ email });
-    return user || null;
+    return await this.usersRepository.findOneBy({ email });
   }
   async updateUser(id: number, body: Partial<User>): Promise<User> {
     let userToUpdate = await this.usersRepository.findOneBy({ id });

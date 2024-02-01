@@ -11,10 +11,10 @@ export class AuthController {
     private userService: UserService,
   ) {}
 
-  // @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {
-    return await this.authService.login(req.body.user);
+    return await this.authService.login(req.user);
   }
 
   @Post('register')

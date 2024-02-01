@@ -7,14 +7,13 @@ import { User } from 'src/user/user.entity';
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
+    private readonly userService: UserService,
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string) {
-    console.log('hi');
-    const user = await this.userService.findOneWithUsername(email);
-    if (user && (await bcrypt.compare(pass, user.pass))) {
+  async validateUser(username: string, password: string) {
+    const user = await this.userService.findOneWithUsername(username);
+    if (user && (await bcrypt.compare(password, user.pass))) {
       const { pass, ...result } = user;
       return result;
     }
