@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
-import LoginForm from "./auth/Login";
-import { Link } from "@chakra-ui/react";
+import LoginForm from "./auth/LoginForm";
 import { Button } from "@chakra-ui/react";
-import CreatePw from "./auth/CreatePw";
 import Register from "./auth/Register";
 
 const App = () => {
@@ -15,7 +13,9 @@ const App = () => {
         {view === 0 ? (
           <>
             <p>Welcome to HoneyDo</p>
-            <Button colorScheme="blue">Login</Button>
+            <Button colorScheme="blue" onClick={() => setView(2)}>
+              Login
+            </Button>
             <p>
               If you're a new user{" "}
               <a href="#" color="blue" onClick={() => setView(1)}>
@@ -30,7 +30,7 @@ const App = () => {
             <Register />
           </div>
         ) : view === 2 ? (
-          <CreatePw />
+          <LoginForm />
         ) : null}
       </header>
     </div>
