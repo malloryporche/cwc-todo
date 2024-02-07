@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -7,7 +7,7 @@ import { User } from 'src/user/user.entity';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
+    private userService: UserService,
     private jwtService: JwtService,
   ) {}
 
@@ -17,7 +17,7 @@ export class AuthService {
       const { pass, ...result } = user;
       return result;
     }
-    throw new UnauthorizedException();
+    return null;
   }
 
   async login(user: User) {
