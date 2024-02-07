@@ -19,7 +19,7 @@ export class UserService {
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
     const hashedPass = bcrypt.hashSync(user.pass, salt);
-    const userWithHashPass = { ...user, pass: hashedPass, salt: salt };
+    const userWithHashPass = { ...user, pass: hashedPass };
     return await this.usersRepository.save(userWithHashPass);
   }
 

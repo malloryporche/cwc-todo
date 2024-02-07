@@ -10,8 +10,11 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ListModule } from './list/list.module';
 import { TodoModule } from './todo/todo.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 dotenv.config();
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -33,7 +36,13 @@ dotenv.config();
     TodoModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    AppService,
+  ],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}

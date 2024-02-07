@@ -13,9 +13,6 @@ export class CreateUserDto {
 
   @IsString()
   pass: string;
-
-  @IsString()
-  salt: string;
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}

@@ -16,7 +16,4 @@ export class User {
 
   @Column()
   pass: string;
-
-  @Column()
-  salt: string;
 }
