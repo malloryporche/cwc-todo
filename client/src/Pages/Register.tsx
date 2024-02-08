@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
-import { Form, redirect } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 
 export interface User {
   name: string;
@@ -39,12 +39,14 @@ export default function Register() {
 
   const [showPass, setShowPass] = useState<boolean>(false);
   const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
+
   const handleClick = (
     event: MouseEvent<HTMLButtonElement>,
     state: boolean,
     setState: Dispatch<SetStateAction<boolean>>
   ) => setState(!state);
 
+  const navigate = useNavigate();
   // const registrationFailedToast: Toast = {
   //   title: "Registration Failed",
   //   description: "Please try again",
@@ -78,9 +80,10 @@ export default function Register() {
             pass: "",
             darkMode: true,
           });
-
+          setConfirmPass("");
+          setSubmitClicked(false);
           //redirect to user dashboard
-          return redirect(`/dashboard/${res.data.id}`);
+          return navigate(`/dashboard/${res.data.id}`);
         })
         .catch((err) => {
           console.log(err);
