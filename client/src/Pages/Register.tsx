@@ -11,6 +11,8 @@ import {
   Stack,
   FormHelperText,
   FormErrorMessage,
+  Toast,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
@@ -47,21 +49,7 @@ export default function Register() {
   ) => setState(!state);
 
   const navigate = useNavigate();
-  // const registrationFailedToast: Toast = {
-  //   title: "Registration Failed",
-  //   description: "Please try again",
-  //   status: "error",
-  //   duration: 3000,
-  //   isClosable: true,
-  // };
-
-  // const registrationSuccessfulToast: Toast = {
-  //   title: "Registration Successful",
-  //   description: "Welcome!",
-  //   status: "success",
-  //   duration: 3000,
-  //   isClosable: true,
-  // };
+  const toast = useToast();
 
   const registerUser = (e: React.FormEvent, user: User) => {
     setSubmitClicked(true);
@@ -83,6 +71,13 @@ export default function Register() {
           setConfirmPass("");
           setSubmitClicked(false);
           //redirect to user dashboard
+          toast({
+            title: "Account creation successful",
+            description: "Welcome!",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
           return navigate(`/dashboard/${res.data.id}`);
         })
         .catch((err) => {
