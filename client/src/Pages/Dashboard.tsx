@@ -8,10 +8,12 @@ import {
   Box,
   Badge,
 } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
 import React, { useState, useEffect } from "react";
 import UpcomingTaskList from "../Components/Tasks/UpcomingTaskList";
 import ProjectOverview from "../Components/Projects/ProjectOverview";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 export interface Task {
   id: number;
@@ -26,8 +28,25 @@ export interface Project {
   nextTask: Task;
 }
 
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  projects: Project[];
+  tasks: Task[];
+  darkMode: boolean;
+}
+
 export default function Dashboard() {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState<User>({
+    id: 0,
+    name: "",
+    email: "",
+    projects: [],
+    tasks: [],
+    darkMode: true,
+  });
+
   const [projects, setProjects] = useState([]);
   const [tasks, setTasks] = useState([]);
 
@@ -59,26 +78,33 @@ export default function Dashboard() {
     },
   ];
   const { id } = useParams();
-  // console.log("id is ", id);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/user/${id}`)
+    const configHeaders = {
+      headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    };
+    console.log(configHeaders);
+    axios
+      .get(`http://localhost:3001/users/${id}`, configHeaders)
       .then((res) => {
         console.log(res);
+        setUser(res.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [id]);
 
   return (
     <>
       <Container mb={8}>
         <Flex>
-          <Heading>Hello Username</Heading>
+          <Heading>Hello {user && user.name}</Heading>
           <Spacer />
-          <Button onClick={() => {}}>New Task</Button>
+          <Button onClick={() => {}}>
+            <AddIcon />
+          </Button>
         </Flex>
       </Container>
-      <Container p={5} bg={"gray.500"} maxW={"90%"} mb={8}>
+      <Container p={5} bg={"gray.500"} mb={8}>
         <Text>Today</Text>
         <Heading size={"md"}>2/10 tasks</Heading>
       </Container>
