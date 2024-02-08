@@ -1,6 +1,6 @@
 import App from "./App";
 import ErrorPage from "./error-page";
-import React from "react";
+import React, { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LoginForm from "./Pages/LoginForm";
@@ -43,8 +43,10 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <ChakraProvider theme={theme}>
-    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-    <RouterProvider router={router} />
-  </ChakraProvider>
+  <StrictMode>
+    <ChakraProvider theme={theme}>
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <RouterProvider router={router} />
+    </ChakraProvider>
+  </StrictMode>
 );

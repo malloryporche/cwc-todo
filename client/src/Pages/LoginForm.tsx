@@ -45,6 +45,7 @@ export default function LoginForm() {
       const jwt = res.data.accessToken;
       localStorage.setItem("jwt", jwt);
       localStorage.setItem("name", res.data.name);
+      localStorage.setItem("id", res.data.id);
     } catch (err) {
       console.log(err);
     }

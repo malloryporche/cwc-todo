@@ -19,7 +19,7 @@ import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 const Header = () => {
   const jwt = localStorage.getItem("jwt");
   const { colorMode, toggleColorMode } = useColorMode();
-  const [isLoggedin, setIsLoggedin] = useState(true);
+  const [isLoggedin, setIsLoggedin] = useState(false);
 
   const updateLogin = () => {
     setIsLoggedin(!isLoggedin);
@@ -44,7 +44,7 @@ const Header = () => {
             <MenuList>
               <MenuItem onClick={toggleColorMode}>
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-                <Text pl="2">Toggle {colorMode}</Text>
+                <Text pl="2">Mode</Text>
               </MenuItem>
               {isLoggedin ? (
                 <>
