@@ -2,43 +2,49 @@ import App from "./App";
 import ErrorPage from "./error-page";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {
-  ChakraBaseProvider,
-  extendBaseTheme,
-  theme as chakraTheme,
-} from "@chakra-ui/react";
-// import reportWebVitals from "./reportWebVitals";
-
-const { Button } = chakraTheme.components;
-const theme = extendBaseTheme({
-  components: {
-    Button,
-  },
-});
-
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+import LoginForm from "./Pages/LoginForm";
+import Register from "./Pages/Register";
+import theme from "./theme";
+import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import Dashboard from "./Pages/Dashboard";
+import ProjectsView from "./Pages/ProjectsView";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/login",
+        element: <LoginForm />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        path: "/dashboard/:id",
+        element: <Dashboard />,
+        children: [
+          {
+            path: "/dashboard/:id/projects",
+            element: <ProjectsView />,
+          },
+        ],
+      },
+    ],
   },
 ]);
 
-root.render(
-  <ChakraBaseProvider theme={theme}>
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
-  </ChakraBaseProvider>
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// reportWebVitals();
+root.render(
+  <ChakraProvider theme={theme}>
+    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+    <RouterProvider router={router} />
+  </ChakraProvider>
+);

@@ -8,9 +8,10 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Heading,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"; //ViewIcon, ViewOffIcon
-import { Form } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 
 export interface RegisteredUser {
   username: string;
@@ -25,34 +26,39 @@ export default function LoginForm() {
 
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
+  const navigate = useNavigate();
 
-  const login = (e: React.FormEvent, user: RegisteredUser) => {
+  const login = async (e: React.FormEvent, user: RegisteredUser) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:3001/auth/login", user)
-      .then((res) => {
-        console.log(res.data);
-        setUser({
-          username: "",
-          password: "",
-        });
-        //redirect to user dashboard
-      })
-      .catch((err) => {
-        console.log(err);
+
+    try {
+      const res = await axios.post("http://localhost:3001/auth/login", user);
+      console.log("res data ", res.data);
+      const loggedInUser = res.data;
+      setUser({
+        username: "",
+        password: "",
       });
+
+      navigate("/dashboard/" + loggedInUser.id, { replace: true });
+
+      const jwt = res.data.accessToken;
+      localStorage.setItem("jwt", jwt);
+      localStorage.setItem("name", res.data.name);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <Container>
-      <h1>Login</h1>
+      <Heading>Login</Heading>
       <Form onSubmit={(e) => login(e, user)}>
         <FormControl isRequired>
           <FormLabel htmlFor="email">Email</FormLabel>
           <Input
             type="email"
             placeholder="Enter your email"
-            color="blue"
             name="email"
             id="email"
             autoComplete="email"
@@ -65,7 +71,6 @@ export default function LoginForm() {
           <InputGroup size="md">
             <Input
               placeholder="Enter a password."
-              color="blue"
               name="password"
               id="password"
               autoComplete="new-password"
