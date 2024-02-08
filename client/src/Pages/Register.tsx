@@ -70,7 +70,7 @@ export default function Register() {
           });
           setConfirmPass("");
           setSubmitClicked(false);
-          //redirect to user dashboard
+
           toast({
             title: "Account creation successful",
             description: "Welcome!",
@@ -78,11 +78,35 @@ export default function Register() {
             duration: 3000,
             isClosable: true,
           });
-          return navigate(`/dashboard/${res.data.id}`);
+          return login(user.email, user.pass);
+          // return navigate(`/dashboard/${res.data.id}`);
         })
         .catch((err) => {
           console.log(err);
         });
+    }
+  };
+
+  const login = async (username: string, password: string) => {
+    const userObj = {
+      username,
+      password,
+    };
+
+    try {
+      const res = await axios.post("http://localhost:3001/auth/login", userObj);
+      console.log("res data ", res.data);
+      const loggedInUser = res.data;
+
+      navigate("/dashboard/" + loggedInUser.id, { replace: true });
+
+      const jwt = res.data.accessToken;
+      localStorage.setItem("jwt", jwt);
+      localStorage.setItem("name", res.data.name);
+      localStorage.setItem("id", res.data.id);
+      console.log(localStorage);
+    } catch (err) {
+      console.log(err);
     }
   };
 

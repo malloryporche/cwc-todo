@@ -11,7 +11,7 @@ import {
 import React, { useState, useEffect } from "react";
 import UpcomingTaskList from "../Components/Tasks/UpcomingTaskList";
 import ProjectOverview from "../Components/Projects/ProjectOverview";
-import { useLoaderData } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export interface Task {
   id: number;
@@ -25,9 +25,6 @@ export interface Project {
   deadline: Date;
   nextTask: Task;
 }
-// type TaskListProps = {
-//   upcomingTasks: { id: number; name: string; dueDate: string }[];
-// };
 
 export default function Dashboard() {
   const [user, setUser] = useState({});
@@ -61,17 +58,16 @@ export default function Dashboard() {
       nextTask: upcomingTaskList[0],
     },
   ];
-  // const id = params.id;
+  const { id } = useParams();
   // console.log("id is ", id);
 
-  // useEffect(() => {
-  //   fetch(`http://localhost:3001/user/${:id}`)
-  //     .then((res) => res.json())
-  //     .then((data) => setProjects(data));
-  //   fetch("/api/tasks")
-  //     .then((res) => res.json())
-  //     .then((data) => setTasks(data));
-  // }, []);
+  useEffect(() => {
+    fetch(`http://localhost:3001/user/${id}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <>
