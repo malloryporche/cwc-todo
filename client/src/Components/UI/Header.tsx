@@ -29,7 +29,7 @@ const Header = () => {
   return (
     <Flex minWidth="max-content" alignItems="center" gap="2">
       <Box p="2">
-        <Heading size="md">HoneyDo</Heading>
+        <Heading size="sm">HoneyDo</Heading>
       </Box>
       <Spacer />
       <Menu>
