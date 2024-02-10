@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const jwt = localStorage.getItem("jwt");
@@ -26,6 +27,11 @@ const Header = () => {
     setIsLoggedin(!isLoggedin);
   };
 
+  const logout = () => {
+    localStorage.clear();
+    updateLogin();
+  };
+
   console.log(localStorage);
   return (
     <Container>
@@ -34,11 +40,11 @@ const Header = () => {
           <Heading size="sm">HoneyDo</Heading>
         </Box>
         <Spacer />
-        <Box>
+        {/* <Box>
           <Heading size="sm">Projects</Heading>
-        </Box>
+        </Box> */}
         <Box>
-          <Heading size="sm">Tasks</Heading>
+          <Link to="/register">Sign Up</Link>
         </Box>
         <Box>
           <Button onClick={toggleColorMode} variant={"ghost"}>
@@ -65,11 +71,11 @@ const Header = () => {
                       ></Avatar>
                       <Text pl="2">Account Settings</Text>
                     </MenuItem>
-                    <MenuItem onClick={updateLogin}>Logout</MenuItem>
+                    <MenuItem onClick={logout}>Logout</MenuItem>
                   </>
                 ) : (
-                  <MenuItem onClick={() => alert("Modal with login")}>
-                    Login
+                  <MenuItem>
+                    <Link to="/login">Login</Link>
                   </MenuItem>
                 )}
               </MenuList>
