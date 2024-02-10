@@ -32,20 +32,26 @@ const Header = () => {
     updateLogin();
   };
 
-  console.log(localStorage);
+  console.log(isLoggedin);
+
   return (
-    <Container>
+    <Container pb={4}>
       <Flex minWidth="max-content" alignItems="center" gap="2">
         <Box p="2">
           <Heading size="sm">HoneyDo</Heading>
         </Box>
         <Spacer />
-        {/* <Box>
-          <Heading size="sm">Projects</Heading>
-        </Box> */}
-        <Box>
-          <Link to="/register">Sign Up</Link>
-        </Box>
+
+        {isLoggedin ? (
+          <Box>
+            <Link to="/projects">Projects</Link>
+          </Box>
+        ) : (
+          <Box>
+            <Link to="/register">Sign Up</Link>
+          </Box>
+        )}
+
         <Box>
           <Button onClick={toggleColorMode} variant={"ghost"}>
             {colorMode === "light" ? <MoonIcon /> : <SunIcon />}

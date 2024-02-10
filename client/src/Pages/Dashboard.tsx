@@ -83,7 +83,7 @@ export default function Dashboard() {
     const configHeaders = {
       headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     };
-    console.log(configHeaders);
+
     axios
       .get(`http://localhost:3001/users/${id}`, configHeaders)
       .then((res) => {
@@ -97,14 +97,16 @@ export default function Dashboard() {
     <>
       <Container mb={8}>
         <Flex>
-          <Heading>Hello {user && user.name}</Heading>
+          <Heading size="lg" mb={4}>
+            Hello {user && user.name}
+          </Heading>
           <Spacer />
           <Button onClick={() => {}}>
             <AddIcon />
           </Button>
         </Flex>
       </Container>
-      <Container p={5} bg={"gray.500"} mb={8}>
+      <Container p={5} bg={"gray.500"} mb={8} rounded={"2xl"}>
         <Text>Today</Text>
         <Heading size={"md"}>2/10 tasks</Heading>
       </Container>

@@ -9,6 +9,7 @@ import {
   InputGroup,
   InputRightElement,
   Heading,
+  Stack,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"; //ViewIcon, ViewOffIcon
 import { Form, useNavigate } from "react-router-dom";
@@ -52,43 +53,53 @@ export default function LoginForm() {
   };
 
   return (
-    <Container>
-      <Heading>Login</Heading>
+    <Container
+      h={"90vh"}
+      display={"flex"}
+      justifyContent={"center"}
+      alignItems={"center"}
+      flexDirection={"column"}
+    >
+      <Heading size="md" textAlign={"center"}>
+        Login
+      </Heading>
       <Form onSubmit={(e) => login(e, user)}>
-        <FormControl isRequired>
-          <FormLabel htmlFor="email">Email</FormLabel>
-          <Input
-            type="email"
-            placeholder="Enter your email"
-            name="email"
-            id="email"
-            autoComplete="email"
-            value={user.username}
-            onChange={(e) => setUser({ ...user, username: e.target.value })}
-          />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel htmlFor="password">Password</FormLabel>
-          <InputGroup size="md">
+        <Stack spacing={4}>
+          <FormControl isRequired>
+            <FormLabel htmlFor="email">Email</FormLabel>
             <Input
-              placeholder="Enter a password."
-              name="password"
-              id="password"
-              autoComplete="new-password"
-              value={user.password}
-              type={show ? "text" : "password"}
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              type="email"
+              placeholder="Enter your email"
+              name="email"
+              id="email"
+              autoComplete="email"
+              value={user.username}
+              onChange={(e) => setUser({ ...user, username: e.target.value })}
             />
-            <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
-                {show ? <ViewOffIcon /> : <ViewIcon />}
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-        </FormControl>
-        <Button type="submit" colorScheme="blue">
-          Login
-        </Button>
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <InputGroup size="md">
+              <Input
+                placeholder="Enter a password."
+                name="password"
+                id="password"
+                autoComplete="new-password"
+                value={user.password}
+                type={show ? "text" : "password"}
+                onChange={(e) => setUser({ ...user, password: e.target.value })}
+              />
+              <InputRightElement width="4.5rem">
+                <Button h="1.75rem" size="sm" onClick={handleClick}>
+                  {show ? <ViewOffIcon /> : <ViewIcon />}
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+          </FormControl>
+          <Button type="submit" colorScheme="blue">
+            Login
+          </Button>
+        </Stack>
       </Form>
     </Container>
   );
