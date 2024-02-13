@@ -17,23 +17,25 @@ import {
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const Header = () => {
   const jwt = localStorage.getItem("jwt");
   const { colorMode, toggleColorMode } = useColorMode();
   const navigate = useNavigate();
   const [isLoggedin, setIsLoggedin] = useState(false);
+  let { id } = useParams();
 
   const logout = () => {
     localStorage.clear();
-
     navigate("/login", { replace: true });
   };
 
   useEffect(() => {
     if (jwt) {
-      setIsLoggedin(true);
+      if (localStorage.getItem("id") === id) {
+        setIsLoggedin(true);
+      }
     } else {
       setIsLoggedin(false);
       Toast({
@@ -74,15 +76,16 @@ const Header = () => {
                   <MenuList>
                     {jwt ? (
                       <>
-                        <MenuItem
-                          onClick={() => alert("Modal with user settings")}
-                        >
+                        <MenuItem>
                           <Avatar
                             size="sm"
                             name={localStorage.getItem("name") || "User"}
                             src="https://bit.ly/kagebunshin"
+                            mr={4}
                           ></Avatar>
-                          <Text pl="2">Account Settings</Text>
+                          <Link to={`/users/${id}/profile`}>
+                            Account Settings
+                          </Link>
                         </MenuItem>
                         <MenuItem onClick={logout}>Logout</MenuItem>
                       </>

@@ -49,6 +49,7 @@ export default function Dashboard() {
   const [isLoggedin, setIsLoggedin] = useState(true);
   const [projects, setProjects] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const { id } = useParams();
 
   const upcomingTaskList: Task[] = [
     {
@@ -77,7 +78,6 @@ export default function Dashboard() {
       nextTask: upcomingTaskList[0],
     },
   ];
-  const { id } = useParams();
 
   useEffect(() => {
     const configHeaders = {
@@ -92,7 +92,7 @@ export default function Dashboard() {
       })
       .then(() => setIsLoggedin(true))
       .catch((err) => console.log(err));
-  }, [id]);
+  }, []);
 
   return (
     <>

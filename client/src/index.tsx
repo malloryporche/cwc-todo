@@ -2,13 +2,21 @@ import App from "./App";
 import ErrorPage from "./error-page";
 import React, { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  redirect,
+  RouterProvider,
+} from "react-router-dom";
 import LoginForm from "./Pages/LoginForm";
 import Register from "./Pages/Register";
 import theme from "./theme";
-import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import { createStandaloneToast } from "@chakra-ui/react";
 import Dashboard from "./Pages/Dashboard";
 import ProjectsView from "./Pages/ProjectsView";
+import Profile from "./Pages/Profile";
+import axios from "axios";
+
+const { ToastContainer, toast } = createStandaloneToast();
 
 const router = createBrowserRouter([
   {
@@ -25,11 +33,52 @@ const router = createBrowserRouter([
         element: <Register />,
       },
       {
-        path: "/dashboard/:id",
-        element: <Dashboard />,
+        path: "/users/",
         children: [
           {
-            path: "/dashboard/:id/projects",
+            path: "/users/:id/profile",
+            element: <Profile />,
+            loader: async () => {
+              const token = localStorage.getItem("jwt");
+              if (token) {
+                try {
+                  const response = await axios.get(
+                    "http://localhost:3001/profile",
+                    {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    }
+                  );
+                  return response.data;
+                } catch (err) {
+                  toast({
+                    title: "You must be signed in to view this page.",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                  });
+                  return null;
+                  // return redirect("/login");
+                }
+              } else {
+                toast({
+                  title: "You must be logged in to view this page.",
+                  status: "error",
+                  duration: 3000,
+                  isClosable: true,
+                });
+                return null;
+                // return redirect("/login");
+              }
+            },
+          },
+          {
+            path: "/users/:id/dashboard",
+            element: <Dashboard />,
+          },
+          {
+            path: "/users/:id/projects",
             element: <ProjectsView />,
           },
         ],
@@ -43,10 +92,10 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <StrictMode>
-    <ChakraProvider theme={theme}>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <RouterProvider router={router} />
-    </ChakraProvider>
-  </StrictMode>
+  <>
+    <ToastContainer />
+    <RouterProvider router={router} />
+  </>
 );
+
+export default router;

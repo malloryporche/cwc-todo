@@ -12,6 +12,7 @@ import {
   Stack,
   Text,
   Box,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"; //ViewIcon, ViewOffIcon
 import { Form, useNavigate, Link } from "react-router-dom";
@@ -30,6 +31,7 @@ export default function LoginForm() {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const navigate = useNavigate();
+  const toast = useToast();
 
   const login = async (e: React.FormEvent, user: RegisteredUser) => {
     e.preventDefault();
@@ -43,14 +45,34 @@ export default function LoginForm() {
         password: "",
       });
 
-      navigate("/dashboard/" + loggedInUser.id, { replace: true });
+      navigate(`/users/${loggedInUser.id}/dashboard`, { replace: true });
 
       const jwt = res.data.accessToken;
       localStorage.setItem("jwt", jwt);
       localStorage.setItem("name", res.data.name);
       localStorage.setItem("id", res.data.id);
+
+      toast({
+        title: `Welcome Back ${res.data.name}`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
     } catch (err) {
       console.log(err);
+
+      setUser({
+        username: "",
+        password: "",
+      });
+
+      toast({
+        title:
+          "There was an error logging into your account.  Please try again!",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
