@@ -10,9 +10,11 @@ import {
   InputRightElement,
   Heading,
   Stack,
+  Text,
+  Box,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"; //ViewIcon, ViewOffIcon
-import { Form, useNavigate } from "react-router-dom";
+import { Form, useNavigate, Link } from "react-router-dom";
 
 export interface RegisteredUser {
   username: string;
@@ -99,6 +101,12 @@ export default function LoginForm() {
           <Button type="submit" colorScheme="blue">
             Login
           </Button>
+          <Box textAlign={"center"}>
+            <Text>Don't have an account?</Text>
+            <Link to="/register">
+              <Text color="blue.200">Register here.</Text>
+            </Link>{" "}
+          </Box>
         </Stack>
       </Form>
     </Container>

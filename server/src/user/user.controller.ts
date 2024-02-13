@@ -6,9 +6,11 @@ import {
   Post,
   Patch,
   Delete,
+  Request,
   UseGuards,
   ParseIntPipe,
   ValidationPipe,
+  UnauthorizedException,
 } from '@nestjs/common';
 // import { User } from './user.entity';
 import { UserService } from './user.service';
@@ -33,8 +35,21 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id') // GET /users/:id
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.findOne(id);
+  findOne(@Param('id', ParseIntPipe) id: number, @Request() req) {
+    if (req.user) {
+      const user = req.user;
+      console.log(user);
+      try {
+        if (user.userId === id) {
+          return this.usersService.findOne(id);
+        } else {
+          throw new UnauthorizedException();
+        }
+      } catch (error) {
+        console.log(error);
+        throw new UnauthorizedException();
+      }
+    }
   }
 
   @UseGuards(JwtAuthGuard)
@@ -42,8 +57,20 @@ export class UserController {
   updateUser(
     @Param('id', ParseIntPipe) id: number,
     @Body(ValidationPipe) updateUserDto: UpdateUserDto,
+    @Request() req,
   ) {
-    return this.usersService.updateUser(id, updateUserDto);
+    if (req.body) {
+      console.log(req.body);
+      // try {
+      //   const user = JSON.parse(req.body.user);
+      //   if (user.id === id) {
+      //     return this.usersService.updateUser(id, updateUserDto);
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      //   throw new UnauthorizedException();
+      // }
+    }
   }
 
   @UseGuards(JwtAuthGuard)

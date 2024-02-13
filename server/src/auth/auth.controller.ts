@@ -13,7 +13,7 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Public } from '../decorators/public.decorator';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(
     private authService: AuthService,
@@ -21,13 +21,13 @@ export class AuthController {
   ) {}
 
   @UseGuards(LocalAuthGuard)
-  @Post('login')
+  @Post('auth/login')
   async login(@Request() req) {
     return await this.authService.login(req.user);
   }
 
   @Public()
-  @Post('register')
+  @Post('auth/register')
   async registerUser(@Body() createUserDto: CreateUserDto) {
     return await this.userService.create(createUserDto);
   }

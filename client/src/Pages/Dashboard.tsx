@@ -46,7 +46,7 @@ export default function Dashboard() {
     tasks: [],
     darkMode: true,
   });
-
+  const [isLoggedin, setIsLoggedin] = useState(true);
   const [projects, setProjects] = useState([]);
   const [tasks, setTasks] = useState([]);
 
@@ -90,6 +90,7 @@ export default function Dashboard() {
         console.log(res);
         setUser(res.data);
       })
+      .then(() => setIsLoggedin(true))
       .catch((err) => console.log(err));
   }, [id]);
 
