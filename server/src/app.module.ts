@@ -12,6 +12,7 @@ import { ListModule } from './list/list.module';
 import { TodoModule } from './todo/todo.module';
 
 dotenv.config();
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({

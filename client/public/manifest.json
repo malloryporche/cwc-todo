@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Mallory's HoneyDo App",
+  "name": "A simple task planner to get S*** done.",
   "icons": [
     {
       "src": "favicon.ico",

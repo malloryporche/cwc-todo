@@ -7,7 +7,7 @@ import { User } from 'src/user/user.entity';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
+    private userService: UserService,
     private jwtService: JwtService,
   ) {}
 
@@ -22,9 +22,11 @@ export class AuthService {
 
   async login(user: User) {
     const payload = {
-      email: user.email,
+      username: user.email,
       sub: {
         name: user.name,
+        id: user.id,
+        darkMode: user.darkMode,
       },
     };
 
