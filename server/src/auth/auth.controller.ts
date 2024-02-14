@@ -33,6 +33,12 @@ export class AuthController {
     return await this.userService.create(createUserDto);
   }
 
+  @Public()
+  @Post('reset-password')
+  async resetPassword(@Body() email: string) {
+    console.log(email);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   async getProfileData(@Request() req) {

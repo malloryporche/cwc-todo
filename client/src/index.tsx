@@ -14,6 +14,7 @@ import Dashboard from "./Pages/Dashboard";
 import ProjectsView from "./Pages/ProjectsView";
 import Profile from "./Pages/Profile";
 import axios from "axios";
+import ResetPassword from "./Pages/ResetPassword";
 
 const { ToastContainer, toast } = createStandaloneToast();
 
