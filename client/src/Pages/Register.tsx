@@ -11,12 +11,12 @@ import {
   Stack,
   FormHelperText,
   FormErrorMessage,
-  Toast,
   useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
-import { Form, useNavigate } from "react-router-dom";
+import { Form, useNavigate, useOutletContext } from "react-router-dom";
+import { Context } from "../App";
 
 export interface User {
   name: string;
@@ -26,6 +26,7 @@ export interface User {
 }
 
 export default function Register() {
+  const context = useOutletContext() as Context;
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -61,7 +62,6 @@ export default function Register() {
       axios
         .post("http://localhost:3001/auth/register", user)
         .then((res) => {
-          console.log(res.data);
           setUser({
             name: "",
             email: "",
@@ -79,10 +79,15 @@ export default function Register() {
             isClosable: true,
           });
           return login(user.email, user.pass);
-          // return navigate(`/dashboard/${res.data.id}`);
         })
         .catch((err) => {
           console.log(err);
+          toast({
+            title: "Error creating account. Please try again.",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
         });
     }
   };
@@ -95,16 +100,11 @@ export default function Register() {
 
     try {
       const res = await axios.post("http://localhost:3001/auth/login", userObj);
-      console.log("res data ", res.data);
-      const loggedInUser = res.data;
-
-      navigate("/dashboard/" + loggedInUser.id, { replace: true });
-
       const jwt = res.data.accessToken;
+      context.toggleLogin();
+      context.setUser(res.data);
       localStorage.setItem("jwt", jwt);
-      localStorage.setItem("name", res.data.name);
-      localStorage.setItem("id", res.data.id);
-      console.log(localStorage);
+      navigate(`/users/${res.data.id}/dashboard`, { replace: true });
     } catch (err) {
       console.log(err);
     }

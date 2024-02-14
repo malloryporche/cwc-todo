@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { MouseEventHandler, useEffect, useState } from "react";
 import {
   Button,
   useColorMode,
@@ -11,43 +11,39 @@ import {
   MenuItem,
   MenuList,
   Avatar,
-  Text,
   Container,
-  Toast,
+  useToast,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
+import { Context, User } from "../../App";
 
-const Header = () => {
-  const jwt = localStorage.getItem("jwt");
+type Props = {
+  isLoggedIn: boolean;
+  toggleLogin: () => void;
+  user?: User;
+  setUser: (user: User) => void;
+};
+
+const Header = ({ isLoggedIn, toggleLogin, user, setUser }: Props) => {
   const { colorMode, toggleColorMode } = useColorMode();
+
   const navigate = useNavigate();
-  const [isLoggedin, setIsLoggedin] = useState(false);
-  let { id } = useParams();
-
+  const toast = useToast();
+  console.log("IS LOGGED IN: ", isLoggedIn);
   const logout = () => {
-    localStorage.clear();
-    navigate("/login", { replace: true });
+    toggleLogin();
+    localStorage.removeItem("jwt");
+    setUser({ id: 0, name: "", darkMode: true, email: "" });
+    navigate("/");
+    toast({
+      title: "You've successfully logged out.",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
   };
-
-  useEffect(() => {
-    if (jwt) {
-      if (localStorage.getItem("id") === id) {
-        setIsLoggedin(true);
-      }
-    } else {
-      setIsLoggedin(false);
-      Toast({
-        title: "Logged out",
-        description: "You must be logged in to view the Dashboard",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      });
-      navigate("/login", { replace: true });
-    }
-  }, [jwt]);
 
   return (
     <Container pb={4}>
@@ -59,7 +55,7 @@ const Header = () => {
         </Box>
         <Spacer />
 
-        {jwt ? (
+        {isLoggedIn ? (
           <>
             <Box>
               <Link to="/projects">Projects</Link>
@@ -74,7 +70,7 @@ const Header = () => {
                     variant="ghost"
                   ></MenuButton>
                   <MenuList>
-                    {jwt ? (
+                    {isLoggedIn ? (
                       <>
                         <MenuItem>
                           <Avatar
@@ -83,7 +79,7 @@ const Header = () => {
                             src="https://bit.ly/kagebunshin"
                             mr={4}
                           ></Avatar>
-                          <Link to={`/users/${id}/profile`}>
+                          <Link to={`/users/${user?.id}/profile`}>
                             Account Settings
                           </Link>
                         </MenuItem>

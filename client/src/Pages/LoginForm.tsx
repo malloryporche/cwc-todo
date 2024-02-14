@@ -15,7 +15,8 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"; //ViewIcon, ViewOffIcon
-import { Form, useNavigate, Link } from "react-router-dom";
+import { Form, useNavigate, Link, useOutletContext } from "react-router-dom";
+import { Context } from "../App";
 
 export interface RegisteredUser {
   username: string;
@@ -23,11 +24,11 @@ export interface RegisteredUser {
 }
 
 export default function LoginForm() {
+  const context = useOutletContext() as Context;
   const [user, setUser] = useState({
     username: "",
     password: "",
   });
-
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const navigate = useNavigate();
@@ -38,20 +39,16 @@ export default function LoginForm() {
 
     try {
       const res = await axios.post("http://localhost:3001/auth/login", user);
-      console.log("res data ", res.data);
-      const loggedInUser = res.data;
+      context.setUser(res.data);
       setUser({
         username: "",
         password: "",
       });
 
-      navigate(`/users/${loggedInUser.id}/dashboard`, { replace: true });
-
+      navigate(`/users/${context.user.id}/dashboard`, { replace: true });
       const jwt = res.data.accessToken;
       localStorage.setItem("jwt", jwt);
-      localStorage.setItem("name", res.data.name);
-      localStorage.setItem("id", res.data.id);
-
+      context.toggleLogin();
       toast({
         title: `Welcome Back ${res.data.name}`,
         status: "success",
@@ -60,7 +57,6 @@ export default function LoginForm() {
       });
     } catch (err) {
       console.log(err);
-
       setUser({
         username: "",
         password: "",
@@ -126,7 +122,7 @@ export default function LoginForm() {
           <Box textAlign={"center"}>
             <Text>Don't have an account?</Text>
             <Link to="/register">
-              <Text color="blue.200">Register here.</Text>
+              <Text color="blue.200">Register here</Text>
             </Link>{" "}
           </Box>
         </Stack>

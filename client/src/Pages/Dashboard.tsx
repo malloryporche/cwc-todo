@@ -5,15 +5,14 @@ import {
   Text,
   Flex,
   Spacer,
-  Box,
-  Badge,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import React, { useState, useEffect } from "react";
 import UpcomingTaskList from "../Components/Tasks/UpcomingTaskList";
 import ProjectOverview from "../Components/Projects/ProjectOverview";
-import { useParams } from "react-router-dom";
+import { useParams, useOutletContext } from "react-router-dom";
 import axios from "axios";
+import { Context } from "../App";
 
 export interface Task {
   id: number;
@@ -38,18 +37,11 @@ interface User {
 }
 
 export default function Dashboard() {
-  const [user, setUser] = useState<User>({
-    id: 0,
-    name: "",
-    email: "",
-    projects: [],
-    tasks: [],
-    darkMode: true,
-  });
-  const [isLoggedin, setIsLoggedin] = useState(true);
+  const context = useOutletContext() as Context;
+  const user = context.user;
+
   const [projects, setProjects] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const { id } = useParams();
 
   const upcomingTaskList: Task[] = [
     {
@@ -79,27 +71,12 @@ export default function Dashboard() {
     },
   ];
 
-  useEffect(() => {
-    const configHeaders = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
-    };
-
-    axios
-      .get(`http://localhost:3001/users/${id}`, configHeaders)
-      .then((res) => {
-        console.log(res);
-        setUser(res.data);
-      })
-      .then(() => setIsLoggedin(true))
-      .catch((err) => console.log(err));
-  }, []);
-
   return (
     <>
       <Container mb={8}>
         <Flex>
           <Heading size="lg" mb={4}>
-            Hello {user && user.name}
+            Hello {user.name}
           </Heading>
           <Spacer />
           <Button onClick={() => {}}>

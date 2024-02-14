@@ -22,10 +22,11 @@ export class AuthService {
 
   async login(user: User) {
     const payload = {
-      email: user.email,
+      username: user.email,
       sub: {
         name: user.name,
         id: user.id,
+        darkMode: user.darkMode,
       },
     };
 

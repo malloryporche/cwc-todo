@@ -9,7 +9,6 @@ import {
 } from "react-router-dom";
 import LoginForm from "./Pages/LoginForm";
 import Register from "./Pages/Register";
-import theme from "./theme";
 import { createStandaloneToast } from "@chakra-ui/react";
 import Dashboard from "./Pages/Dashboard";
 import ProjectsView from "./Pages/ProjectsView";
@@ -23,6 +22,24 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
+    loader: async () => {
+      const token = localStorage.getItem("jwt");
+      if (token) {
+        try {
+          const response = await axios.get("http://localhost:3001/profile", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          return response.data;
+        } catch (err) {
+          console.log(err);
+          return {};
+        }
+      } else {
+        return {};
+      }
+    },
     children: [
       {
         path: "/login",
@@ -58,8 +75,8 @@ const router = createBrowserRouter([
                     duration: 3000,
                     isClosable: true,
                   });
-                  return null;
-                  // return redirect("/login");
+
+                  return redirect("/login");
                 }
               } else {
                 toast({
@@ -68,8 +85,8 @@ const router = createBrowserRouter([
                   duration: 3000,
                   isClosable: true,
                 });
-                return null;
-                // return redirect("/login");
+
+                return redirect("/login");
               }
             },
           },
