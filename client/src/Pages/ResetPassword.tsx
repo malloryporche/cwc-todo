@@ -1,7 +1,6 @@
 import {
   Container,
   Input,
-  Heading,
   FormControl,
   FormLabel,
   Button,
@@ -80,12 +79,6 @@ export default function ResetPassword({ isOpen, onClose }: Props) {
             </Stack>
           </Container>
         </ModalBody>
-
-        <ModalFooter>
-          {/* <Button colorScheme="blue" m={"auto"} onClick={onClose}>
-            Send verification email
-          </Button> */}
-        </ModalFooter>
       </ModalContent>
     </Modal>
   );
