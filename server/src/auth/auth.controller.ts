@@ -34,7 +34,7 @@ export class AuthController {
   }
 
   @Public()
-  @Post('reset-password')
+  @Post('forgot-password')
   async resetPassword(@Body() email: string) {
     console.log(email);
   }

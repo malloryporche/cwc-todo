@@ -25,7 +25,7 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"; //ViewIcon, ViewOffIcon
 import { Form, useNavigate, Link, useOutletContext } from "react-router-dom";
 import { Context } from "../App";
-import ResetPassword from "./ResetPassword";
+import ForgotPassword from "./ForgotPassword";
 
 export interface RegisteredUser {
   username: string;
@@ -149,7 +149,7 @@ export default function LoginForm() {
         </Form>
       </Container>
 
-      <ResetPassword isOpen={isOpen} onClose={onClose} />
+      <ForgotPassword isOpen={isOpen} onClose={onClose} />
     </>
   );
 }

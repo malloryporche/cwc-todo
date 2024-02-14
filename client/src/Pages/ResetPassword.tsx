@@ -1,85 +1,116 @@
+import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
 import {
   Container,
-  Input,
+  Heading,
+  Stack,
   FormControl,
   FormLabel,
+  Input,
+  InputGroup,
+  InputRightElement,
   Button,
-  Stack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
+  Box,
 } from "@chakra-ui/react";
-import { Form } from "react-router-dom";
-import React, { useState } from "react";
 import axios from "axios";
+import React, { useState, MouseEvent, Dispatch, SetStateAction } from "react";
+import { Form, Link } from "react-router-dom";
 
-type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-};
+export default function ResetPassword() {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-export default function ResetPassword({ isOpen, onClose }: Props) {
-  const [email, setEmail] = useState("");
+  const [showPass, setShowPass] = useState<boolean>(false);
+  const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
+  const handleClick = (
+    event: MouseEvent<HTMLButtonElement>,
+    state: boolean,
+    setState: Dispatch<SetStateAction<boolean>>
+  ) => setState(!state);
 
-  const resetPassword = (e: React.FormEvent) => {
-    console.log(email);
+  const resetPassword = (e: React.FormEvent, password: string) => {
     e.preventDefault();
-    onClose();
-    try {
-      axios
-        .post("http://localhost:3001/reset-password", {
-          email: email,
-        })
-        .then((res) => {
-          console.log(res);
-        });
-    } catch (err) {
-      console.log(err);
+    if (password !== confirmPassword) {
+      return;
+    } else {
+      try {
+        axios
+          .post("http://localhost:3001/reset-password", {
+            password: password,
+          })
+          .then((res) => {
+            console.log(res);
+          });
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
-
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader textAlign={"center"}>Reset Your Password</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <Container
-            h={"30vh"}
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            flexDirection={"column"}
-          >
-            <Stack spacing={4}>
-              <Form onSubmit={(e) => resetPassword(e)}>
-                <FormControl isRequired>
-                  <FormLabel htmlFor="email" textAlign={"center"}>
-                    Enter Your Email
-                  </FormLabel>
-                  <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    name="email"
-                    id="email"
-                    autoComplete="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </FormControl>
-                <Button type="submit" colorScheme="blue" mt={4}>
-                  Send verification email
+    <Container
+      h={"90vh"}
+      display={"flex"}
+      justifyContent={"center"}
+      alignItems={"center"}
+      flexDirection={"column"}
+    >
+      <Heading size="md" textAlign={"center"} m={4}>
+        Reset Your Password
+      </Heading>
+      <Form onSubmit={(e) => resetPassword(e, password)}>
+        <Stack spacing={4}>
+          <FormControl isRequired>
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <InputGroup size="md">
+              <Input
+                placeholder="Enter a password."
+                name="password"
+                id="password"
+                autoComplete="new-password"
+                value={password}
+                type={showPass ? "text" : "password"}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <InputRightElement width="4.5rem">
+                <Button
+                  h="1.75rem"
+                  size="sm"
+                  onClick={(e) => handleClick(e, showPass, setShowPass)}
+                >
+                  {showPass ? <ViewOffIcon /> : <ViewIcon />}
                 </Button>
-              </Form>
-            </Stack>
-          </Container>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+              </InputRightElement>
+            </InputGroup>
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel htmlFor="password">Confirm Password</FormLabel>
+            <InputGroup size="md">
+              <Input
+                placeholder="Enter a password."
+                name="password"
+                id="password"
+                autoComplete="new-password"
+                value={confirmPassword}
+                type={showConfirmPass ? "text" : "password"}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <InputRightElement width="4.5rem">
+                <Button
+                  h="1.75rem"
+                  size="sm"
+                  onClick={(e) =>
+                    handleClick(e, showConfirmPass, setShowConfirmPass)
+                  }
+                >
+                  {showPass ? <ViewOffIcon /> : <ViewIcon />}
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+          </FormControl>
+          <Button type="submit" colorScheme="blue">
+            Reset Password
+          </Button>
+        </Stack>
+      </Form>
+    </Container>
   );
 }
