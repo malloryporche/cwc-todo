@@ -17,10 +17,18 @@ import {
   Button,
   useToast,
   useColorMode,
+  Image,
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { Context, User } from "../App";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
+import DeleteAccountModal from "../Components/UI/DeleteAccountModal";
 
 export default function Profile() {
   const context = useOutletContext() as Context;
@@ -32,6 +40,7 @@ export default function Profile() {
   const navigate = useNavigate();
   const toast = useToast();
   const updateUser = context.updateUserData;
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const logout = () => {
     toggleLogin();
@@ -46,7 +55,7 @@ export default function Profile() {
     });
   };
 
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { toggleColorMode } = useColorMode();
 
   function EditableControls() {
     const {
@@ -93,11 +102,19 @@ export default function Profile() {
       flexDirection={"column"}
     >
       <Heading textAlign="center">Profile</Heading>
-      <Stack p={4}>
+      <Stack p={6}>
+        <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+          <Image
+            src="https://bit.ly/dan-abramov"
+            alt="Dan Abramov"
+            borderRadius="full"
+            boxSize="100px"
+          />{" "}
+        </Box>
         <Editable
           textAlign="center"
           defaultValue={username}
-          fontSize="2xl"
+          fontSize="sm"
           isPreviewFocusable={false}
           onSubmit={(value) => {
             updateUser(user.id, "name", value);
@@ -105,7 +122,7 @@ export default function Profile() {
           }}
           display="flex"
         >
-          <Text mr={4} fontSize="sm" alignItems={"center"} display={"flex"}>
+          <Text mr={4} fontSize="xs" alignItems={"center"} display={"flex"}>
             Name
           </Text>
           <EditablePreview />
@@ -117,7 +134,7 @@ export default function Profile() {
         <Editable
           textAlign="center"
           defaultValue={email}
-          fontSize="2xl"
+          fontSize="sm"
           isPreviewFocusable={false}
           onSubmit={(value) => {
             updateUser(user.id, "email", value);
@@ -125,7 +142,7 @@ export default function Profile() {
           }}
           display="flex"
         >
-          <Text mr={4} fontSize="sm" alignItems={"center"} display={"flex"}>
+          <Text mr={4} fontSize="xs" alignItems={"center"} display={"flex"}>
             User email
           </Text>
           <EditablePreview />
@@ -134,24 +151,59 @@ export default function Profile() {
             <EditableControls />
           </Box>
         </Editable>
-        <Text mr={4} fontSize="sm" alignItems={"center"} display={"flex"}>
-          Theme settings:
-        </Text>
-        <Checkbox
-          size="lg"
-          colorScheme="blue"
-          defaultChecked={darkMode}
-          display={"flex"}
-          onChange={() => {
-            updateUser(user.id, "darkMode", !darkMode);
-            toggleColorMode();
-            setUser({ ...user, darkMode: !darkMode });
-          }}
-        >
-          Dark Mode?
-        </Checkbox>
-        <Button onClick={logout}>Logout</Button>
+        <Flex>
+          <Text mr={4} fontSize="xs" alignItems={"center"} display={"flex"}>
+            Theme settings:
+          </Text>
+          <Checkbox
+            size="sm"
+            colorScheme="blue"
+            defaultChecked={darkMode}
+            display={"flex"}
+            onChange={() => {
+              updateUser(user.id, "darkMode", !darkMode);
+              toggleColorMode();
+              setUser({ ...user, darkMode: !darkMode });
+            }}
+          >
+            <Text mr={4} fontSize="sm" alignItems={"center"} display={"flex"}>
+              Dark Mode?
+            </Text>
+          </Checkbox>
+        </Flex>
+        <Button onClick={logout} mt={4}>
+          Logout
+        </Button>
+
+        <Heading size="sm" textAlign={"center"} mt={4}>
+          Delete Account
+        </Heading>
+        <Accordion allowToggle>
+          <AccordionItem>
+            <AccordionButton>
+              <Box as="span" flex="1" textAlign="left">
+                Delete your account, your project and all of your tasks.
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+
+            <AccordionPanel pb={4}>
+              <Button
+                colorScheme="red"
+                size="sm"
+                display={"block"}
+                m="auto"
+                mb={3}
+                onClick={onOpen}
+              >
+                Delete Account
+              </Button>
+              <Text> This action cannot be undone. </Text>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       </Stack>
+      <DeleteAccountModal isOpen={isOpen} onClose={onClose} />
     </Container>
   );
 }
