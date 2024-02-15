@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ListModule } from './list/list.module';
 import { TodoModule } from './todo/todo.module';
+import { MailService } from './mail/mail.service';
+import { MailModule } from './mail/mail.module';
 
 dotenv.config();
 
@@ -32,9 +34,10 @@ dotenv.config();
     }),
     ListModule,
     TodoModule,
+    MailModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, MailService],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Outlet, useLoaderData } from "react-router-dom";
 import Header from "./Components/UI/Header";
@@ -44,6 +44,9 @@ const App = () => {
     setUser,
   };
 
+  useEffect(() => {
+    console.log(user);
+  }, [user?.name]);
   return (
     <>
       <ChakraProvider theme={theme}>

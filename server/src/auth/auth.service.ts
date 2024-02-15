@@ -35,4 +35,23 @@ export class AuthService {
       accessToken: this.jwtService.sign(payload),
     };
   }
+
+  async resetPassword(email: string) {
+    const user = await this.userService.findOneWithUsername(email);
+    const payload = {
+      username: user.email,
+      sub: {
+        name: user.name,
+        id: user.id,
+        darkMode: user.darkMode,
+      },
+    };
+    if (!user) {
+      throw new Error('User with this email not found');
+    }
+
+    return await this.jwtService.sign(payload, {
+      secret: `${user.pass}`,
+    });
+  }
 }

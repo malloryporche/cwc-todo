@@ -35,8 +35,8 @@ export class AuthController {
 
   @Public()
   @Post('forgot-password')
-  async resetPassword(@Body() email: string) {
-    console.log(email);
+  async resetPassword(@Body('email') email: string) {
+    return await this.authService.resetPassword(email);
   }
 
   @UseGuards(JwtAuthGuard)

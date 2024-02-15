@@ -10,7 +10,7 @@ import { PassportModule } from '@nestjs/passport';
 import * as dotenv from 'dotenv';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
-dotenv.config();
+// dotenv.config();
 
 @Module({
   providers: [AuthService, UserService, LocalStrategy, JwtStrategy],
