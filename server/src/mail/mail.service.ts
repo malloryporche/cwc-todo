@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { transporter } from 'nodemailer';
-import forgotPassword from './forgotPassword';
+import resetPasswordTemplate from './resetPasswordTemplate';
 import { SENDMAIL } from './mail';
 
 type Transporter = {
@@ -22,7 +22,7 @@ export class MailService {
             cid: 'logo',
           },
         ],
-        html: resetPasswordTemplate(data),
+        // html: resetPasswordTemplate(data),
       },
       () => {
         console.log('reset password email sent.');

@@ -3,6 +3,7 @@ import "./App.css";
 import { Outlet, useLoaderData } from "react-router-dom";
 import Header from "./Components/UI/Header";
 import { ChakraProvider, theme, ColorModeScript } from "@chakra-ui/react";
+import axios from "axios";
 
 export type User = {
   id: number;
@@ -21,6 +22,7 @@ export type Context = {
     email: string;
   };
   setUser: (user: User) => void;
+  updateUserData: (id: number, key: string, value: string | boolean) => void;
 };
 
 const App = () => {
@@ -28,8 +30,33 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(data?.email !== undefined);
   const [user, setUser] = useState(data);
 
+  const updateTheme = () => {
+    if (!user?.darkMode) {
+      localStorage.setItem("chakra-ui-color-mode", "light");
+    }
+  };
+
   const toggleLogin = () => {
     setIsLoggedIn(!isLoggedIn);
+  };
+
+  const updateUserData = (id: number, key: string, value: string | boolean) => {
+    axios
+      .patch(
+        "http://localhost:3001/users/" + id + "/",
+        { [key]: value },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const context: Context = {
@@ -42,11 +69,12 @@ const App = () => {
       email: user?.email as string,
     },
     setUser,
+    updateUserData,
   };
 
   useEffect(() => {
-    console.log(user);
-  }, [user?.name]);
+    updateTheme();
+  }, [user?.darkMode]);
   return (
     <>
       <ChakraProvider theme={theme}>

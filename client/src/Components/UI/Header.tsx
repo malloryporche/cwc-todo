@@ -79,9 +79,7 @@ const Header = ({ isLoggedIn, toggleLogin, user, setUser }: Props) => {
                             src="https://bit.ly/kagebunshin"
                             mr={4}
                           ></Avatar>
-                          <Link to={`/users/${user?.id}/profile`}>
-                            Account Settings
-                          </Link>
+                          <Link to={`/profile`}>Account Settings</Link>
                         </MenuItem>
                         <MenuItem onClick={logout}>Logout</MenuItem>
                       </>

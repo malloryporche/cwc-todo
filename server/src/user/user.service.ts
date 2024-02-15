@@ -35,6 +35,7 @@ export class UserService {
     return await this.usersRepository.findOneBy({ email });
   }
   async updateUser(id: number, body: Partial<User>): Promise<User> {
+    console.log('body in service', body);
     let userToUpdate = await this.usersRepository.findOneBy({ id });
     userToUpdate = { ...userToUpdate, ...body };
     return await this.usersRepository.save(userToUpdate);

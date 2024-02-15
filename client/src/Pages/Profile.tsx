@@ -16,9 +16,10 @@ import {
   Text,
   Button,
   useToast,
+  useColorMode,
 } from "@chakra-ui/react";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { Context } from "../App";
+import { Context, User } from "../App";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 
 export default function Profile() {
@@ -30,6 +31,7 @@ export default function Profile() {
   const { toggleLogin, setUser } = useOutletContext() as Context;
   const navigate = useNavigate();
   const toast = useToast();
+  const updateUser = context.updateUserData;
 
   const logout = () => {
     toggleLogin();
@@ -44,6 +46,8 @@ export default function Profile() {
     });
   };
 
+  const { colorMode, toggleColorMode } = useColorMode();
+
   function EditableControls() {
     const {
       isEditing,
@@ -56,7 +60,7 @@ export default function Profile() {
       return (
         <ButtonGroup justifyContent="center" size="sm" mt={2}>
           <IconButton
-            aria-label="Update Username"
+            aria-label="Update User Data"
             icon={<CheckIcon />}
             {...getSubmitButtonProps()}
           />
@@ -96,6 +100,7 @@ export default function Profile() {
           fontSize="2xl"
           isPreviewFocusable={false}
           onSubmit={(value) => {
+            updateUser(user.id, "name", value);
             setUser({ ...user, name: value });
           }}
           display="flex"
@@ -115,6 +120,7 @@ export default function Profile() {
           fontSize="2xl"
           isPreviewFocusable={false}
           onSubmit={(value) => {
+            updateUser(user.id, "email", value);
             setUser({ ...user, email: value });
           }}
           display="flex"
@@ -136,7 +142,9 @@ export default function Profile() {
           colorScheme="blue"
           defaultChecked={darkMode}
           display={"flex"}
-          onChange={(e) => {
+          onChange={() => {
+            updateUser(user.id, "darkMode", !darkMode);
+            toggleColorMode();
             setUser({ ...user, darkMode: !darkMode });
           }}
         >

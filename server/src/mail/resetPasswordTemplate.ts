@@ -1,9 +1,14 @@
-const forgotPassword = {
-  from: '"Fred Foo 👻" <foo@example.com>', // sender address
-  to: 'bar@example.com, baz@example.com', // list of receivers
-  subject: 'Hello ✔', // Subject line
-  text: 'Hello world?', // plain text body
-  html: '<b>Hello world?</b>', // html body
+const resetPasswordTemplate = {
+  from: 'sender@example.com',
+  to: 'recipient@example.com',
+  subject: 'Subject',
+  text: 'Text content',
+  html: '<p>HTML content</p>',
+  // Add a function or method if needed
+  send: () => {
+    // Implementation to send the email
+    console.log('Email sent!');
+  },
 };
 
-export default forgotPassword;
+export default resetPasswordTemplate;
