@@ -16,8 +16,8 @@ import {
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { Link, useNavigate, useOutletContext } from "react-router-dom";
-import { Context, User } from "../../App";
+import { Link, useNavigate } from "react-router-dom";
+import { User } from "../../App";
 
 type Props = {
   isLoggedIn: boolean;
@@ -75,7 +75,7 @@ const Header = ({ isLoggedIn, toggleLogin, user, setUser }: Props) => {
                         <MenuItem>
                           <Avatar
                             size="sm"
-                            name={localStorage.getItem("name") || "User"}
+                            name={user?.name || "User"}
                             src="https://bit.ly/kagebunshin"
                             mr={4}
                           ></Avatar>

@@ -61,15 +61,7 @@ export class UserController {
   ) {
     if (req.body) {
       console.log(req.body);
-      // try {
-      //   const user = JSON.parse(req.body.user);
-      //   if (user.id === id) {
-      //     return this.usersService.updateUser(id, updateUserDto);
-      //   }
-      // } catch (error) {
-      //   console.log(error);
-      //   throw new UnauthorizedException();
-      // }
+      return this.usersService.updateUser(id, updateUserDto);
     }
   }
 

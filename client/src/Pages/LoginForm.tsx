@@ -14,13 +14,6 @@ import {
   Box,
   useToast,
   useDisclosure,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"; //ViewIcon, ViewOffIcon
 import { Form, useNavigate, Link, useOutletContext } from "react-router-dom";
@@ -56,7 +49,7 @@ export default function LoginForm() {
         password: "",
       });
 
-      navigate(`/users/${context.user.id}/dashboard`, { replace: true });
+      navigate(`/dashboard`, { replace: true });
       const jwt = res.data.accessToken;
       localStorage.setItem("jwt", jwt);
       context.toggleLogin();

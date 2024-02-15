@@ -14,19 +14,35 @@ import {
   useEditableControls,
   Stack,
   Text,
+  Button,
+  useToast,
 } from "@chakra-ui/react";
-import { useLoaderData, useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Context } from "../App";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 
 export default function Profile() {
-  const data = useLoaderData();
   const context = useOutletContext() as Context;
   const user = context.user;
   const username = context.user.name;
   const email = user.email;
   const darkMode = user.darkMode;
-  const setUser = context.setUser;
+  const { toggleLogin, setUser } = useOutletContext() as Context;
+  const navigate = useNavigate();
+  const toast = useToast();
+
+  const logout = () => {
+    toggleLogin();
+    localStorage.removeItem("jwt");
+    setUser({ id: 0, name: "", darkMode: true, email: "" });
+    navigate("/");
+    toast({
+      title: "You've successfully logged out.",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  };
 
   function EditableControls() {
     const {
@@ -126,6 +142,7 @@ export default function Profile() {
         >
           Dark Mode?
         </Checkbox>
+        <Button onClick={logout}>Logout</Button>
       </Stack>
     </Container>
   );
