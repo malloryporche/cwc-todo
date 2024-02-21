@@ -3,12 +3,14 @@ import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/user/user.entity';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private mailService: MailService,
   ) {}
 
   async validateUser(username: string, password: string) {
@@ -50,8 +52,10 @@ export class AuthService {
       throw new Error('User with this email not found');
     }
 
-    return await this.jwtService.sign(payload, {
+    const token = await this.jwtService.sign(payload, {
       secret: `${user.pass}`,
     });
+
+    this.mailService.sendResetPasswordEmail(user, token, user.id);
   }
 }

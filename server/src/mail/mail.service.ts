@@ -1,28 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { transporter } from 'nodemailer';
 import resetPasswordTemplate from './resetPasswordTemplate';
 import { SENDMAIL } from './mail';
 
-type Transporter = {
-  sendMail(mailOptions: any): Promise<any>;
-};
-
 @Injectable()
 export class MailService {
-  async sendResetPasswordEmail(data) {
+  async sendResetPasswordEmail(user, token, id) {
     SENDMAIL(
       {
         from: 'mallory@animadigitalmarketing.com',
-        to: data.email,
-        subject: 'Reset Password',
+        to: 'mallory@animadigitalmarketing.com',
+        subject: 'Reset Your Password',
         attachments: [
-          {
-            filename: 'logo.png',
-            path: 'server/src/mail/logo.png',
-            cid: 'logo',
-          },
+          // {
+          //   filename: 'logo.png',
+          //   path: './honey-Do.png',
+          //   cid: 'logo',
+          // },
         ],
-        // html: resetPasswordTemplate(data),
+        html: resetPasswordTemplate(token, id),
       },
       () => {
         console.log('reset password email sent.');

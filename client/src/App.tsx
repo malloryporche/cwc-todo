@@ -6,7 +6,6 @@ import {
   ChakraProvider,
   theme,
   ColorModeScript,
-  Toast,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";

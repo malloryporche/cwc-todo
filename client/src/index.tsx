@@ -100,7 +100,7 @@ const router = createBrowserRouter([
         path: "/users/",
         children: [
           {
-            path: "/users/:id/projects",
+            path: "/users/projects",
             element: <ProjectsView />,
           },
         ],

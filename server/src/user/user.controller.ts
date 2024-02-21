@@ -38,15 +38,13 @@ export class UserController {
   findOne(@Param('id', ParseIntPipe) id: number, @Request() req) {
     if (req.user) {
       const user = req.user;
-      console.log(user);
       try {
-        if (user.userId === id) {
+        if (user.id === id) {
           return this.usersService.findOne(id);
         } else {
           throw new UnauthorizedException();
         }
       } catch (error) {
-        console.log(error);
         throw new UnauthorizedException();
       }
     }

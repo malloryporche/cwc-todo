@@ -1,14 +1,12 @@
-const resetPasswordTemplate = {
-  from: 'sender@example.com',
-  to: 'recipient@example.com',
-  subject: 'Subject',
-  text: 'Text content',
-  html: '<p>HTML content</p>',
-  // Add a function or method if needed
-  send: () => {
-    // Implementation to send the email
-    console.log('Email sent!');
-  },
+export const resetPasswordTemplate = (token, id) => {
+  return `
+  <div style="max-width: 700px; margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">
+    <h2 style="text-align: center; text-transform: uppercase;color: teal;">Reset Your Password</h2>
+    <p>Congratulations! You're almost set to start using Animadigitalmarketing.com.
+         Just click the button below to validate your email address and activate your account.</p>
+         <a href="https://localhost:3001/reset-password/${token}/${id}" style="background: crimson; text-decoration: none; color: white; padding: 10px 20px; margin: 10px 0; display: inline-block;">Reset Your Password</a>
+         <p>This link can only be used once and will expire in 1 hour.</p>
+ `;
 };
 
 export default resetPasswordTemplate;
