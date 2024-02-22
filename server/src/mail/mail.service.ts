@@ -32,7 +32,7 @@ export class MailService {
       {
         from: 'mallory@animadigitalmarketing.com',
         to: user.email,
-        submect: 'Your Password Was Recently Reset',
+        subject: 'Your Password Was Recently Reset',
         html: passwordResetNotification(),
       },
       () => {
