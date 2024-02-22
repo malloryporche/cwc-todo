@@ -36,6 +36,8 @@ export default function ResetPassword() {
         axios
           .post("http://localhost:3001/reset-password", {
             password: password,
+            token: window.location.pathname.split("/")[2],
+            id: window.location.pathname.split("/")[3],
           })
           .then((res) => {
             console.log(res);
@@ -87,7 +89,7 @@ export default function ResetPassword() {
               <Input
                 placeholder="Enter a password."
                 name="password"
-                id="password"
+                id="confirmPassword"
                 autoComplete="new-password"
                 value={confirmPassword}
                 type={showConfirmPass ? "text" : "password"}

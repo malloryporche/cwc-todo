@@ -4,7 +4,7 @@ export const resetPasswordTemplate = (token, id) => {
     <h2 style="text-align: center; text-transform: uppercase;color: teal;">Reset Your Password</h2>
     <p>Congratulations! You're almost set to start using Animadigitalmarketing.com.
          Just click the button below to validate your email address and activate your account.</p>
-         <a href="https://localhost:3001/reset-password/${token}/${id}" style="background: crimson; text-decoration: none; color: white; padding: 10px 20px; margin: 10px 0; display: inline-block;">Reset Your Password</a>
+         <a href="http://localhost:3000/reset-password/${token}/${id}" style="background: teal; text-decoration: none; color: white; padding: 10px 20px; margin: 10px 0; display: inline-block; margin: 0 auto;">Reset Your Password</a>
          <p>This link can only be used once and will expire in 1 hour.</p>
  `;
 };

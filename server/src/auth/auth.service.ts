@@ -58,4 +58,19 @@ export class AuthService {
 
     this.mailService.sendResetPasswordEmail(user, token, user.id);
   }
+
+  async confirmResetPassword(
+    userPassword: string,
+    newPassword: string,
+    token: string,
+  ) {
+    const payload = await this.jwtService.verify(token, {
+      secret: userPassword,
+    });
+    const user = await this.userService.findOne(payload.sub.id);
+    if (!user) {
+      throw new Error('User with this email not found');
+    }
+    return this.userService.updatePassword(user, newPassword);
+  }
 }

@@ -23,6 +23,13 @@ export class UserService {
     return await this.usersRepository.save(userWithHashPass);
   }
 
+  async updatePassword(user, password): Promise<User> {
+    const saltRounds = 10;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hashedPass = bcrypt.hashSync(password, salt);
+    const userWithHashPass = { ...user, pass: hashedPass };
+    return await this.usersRepository.save(userWithHashPass);
+  }
   async findOne(id: number): Promise<User | null> {
     const user = await this.usersRepository.findOneBy({ id });
 
