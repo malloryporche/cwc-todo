@@ -11,6 +11,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  useToast,
 } from "@chakra-ui/react";
 import { Form } from "react-router-dom";
 import React, { useState } from "react";
@@ -23,6 +24,7 @@ type Props = {
 
 export default function ForgotPassword({ isOpen, onClose }: Props) {
   const [email, setEmail] = useState("");
+  const toast = useToast();
 
   const resetPassword = (e: React.FormEvent) => {
     console.log(email);
@@ -34,10 +36,20 @@ export default function ForgotPassword({ isOpen, onClose }: Props) {
           email: email,
         })
         .then((res) => {
-          console.log(res);
+          toast({
+            title: "Please check your email for next steps.",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
         });
     } catch (err) {
-      console.log(err);
+      toast({
+        title: `${err}`,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 

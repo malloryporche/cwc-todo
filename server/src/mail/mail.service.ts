@@ -1,14 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import resetPasswordTemplate from './resetPasswordTemplate';
 import { SENDMAIL } from './mail';
+import { User } from 'src/user/user.entity';
+import passwordResetNotification from './passwordResetConfirmation';
 
 @Injectable()
 export class MailService {
-  async sendResetPasswordEmail(user, token, id) {
+  async sendResetPasswordEmail(user: User, token: string, id: number) {
     SENDMAIL(
       {
         from: 'mallory@animadigitalmarketing.com',
-        to: 'mallory@animadigitalmarketing.com',
+        to: user.email,
         subject: 'Reset Your Password',
         attachments: [
           // {
@@ -21,6 +23,20 @@ export class MailService {
       },
       () => {
         console.log('reset password email sent.');
+      },
+    );
+  }
+
+  async sendPasswordResetNotification(user: User) {
+    SENDMAIL(
+      {
+        from: 'mallory@animadigitalmarketing.com',
+        to: user.email,
+        submect: 'Your Password Was Recently Reset',
+        html: passwordResetNotification(),
+      },
+      () => {
+        console.log('password reset notification sent.');
       },
     );
   }

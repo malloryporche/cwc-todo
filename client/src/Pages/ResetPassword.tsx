@@ -10,10 +10,11 @@ import {
   InputRightElement,
   Button,
   Box,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useState, MouseEvent, Dispatch, SetStateAction } from "react";
-import { Form, Link } from "react-router-dom";
+import { Form, Link, useNavigate } from "react-router-dom";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -21,6 +22,9 @@ export default function ResetPassword() {
 
   const [showPass, setShowPass] = useState<boolean>(false);
   const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const toast = useToast();
+
   const handleClick = (
     event: MouseEvent<HTMLButtonElement>,
     state: boolean,
@@ -41,9 +45,23 @@ export default function ResetPassword() {
           })
           .then((res) => {
             console.log(res);
+
+            toast({
+              title:
+                "You have successfully updated your password.  Please login using your new password",
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+            });
+            navigate("/login");
           });
       } catch (err) {
-        console.log(err);
+        toast({
+          title: `${err}`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       }
     }
   };

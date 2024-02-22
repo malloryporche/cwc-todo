@@ -11,7 +11,7 @@ import * as dotenv from 'dotenv';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { MailModule } from 'src/mail/mail.module';
 
-// dotenv.config();
+dotenv.config();
 
 @Module({
   providers: [AuthService, UserService, LocalStrategy, JwtStrategy],
