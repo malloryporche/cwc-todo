@@ -1,4 +1,10 @@
-import { IsEmail, IsString, IsBoolean, IsNotEmpty } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  IsBoolean,
+  IsNotEmpty,
+  Matches,
+} from 'class-validator';
 import * as sanitizeHtml from 'sanitize-html';
 import { Transform } from 'class-transformer';
 
@@ -19,5 +25,12 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  // @Matches(passwordRegEx, {
+  //   message: `Password must contain Minimum 8 and maximum 20 characters,
+  //   at least one uppercase letter,
+  //   one lowercase letter,
+  //   one number and
+  //   one special character`,
+  // })
   pass: string;
 }
