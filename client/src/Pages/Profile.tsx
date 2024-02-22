@@ -24,6 +24,7 @@ import {
   AccordionItem,
   AccordionPanel,
   useDisclosure,
+  Avatar,
 } from "@chakra-ui/react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { Context, User } from "../App";
@@ -103,13 +104,24 @@ export default function Profile() {
     >
       <Heading textAlign="center">Profile</Heading>
       <Stack p={6}>
-        <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
-          <Image
+        <Box
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          mb={4}
+        >
+          {/* <Image
             src="https://bit.ly/dan-abramov"
             alt="Dan Abramov"
             borderRadius="full"
             boxSize="100px"
-          />{" "}
+          />{" "} */}
+          <Avatar
+            size="lg"
+            name={user?.name || "User"}
+            src="https://bit.ly/kagebunshin"
+            mr={4}
+          ></Avatar>
         </Box>
         <Editable
           textAlign="center"

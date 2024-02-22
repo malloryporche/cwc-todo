@@ -32,6 +32,9 @@ const Header = ({ isLoggedIn, toggleLogin, user, setUser }: Props) => {
   const navigate = useNavigate();
   const toast = useToast();
   console.log("IS LOGGED IN: ", isLoggedIn);
+
+  const currentView = window.location.pathname.split("/")[1];
+  console.log(currentView);
   const logout = () => {
     toggleLogin();
     localStorage.removeItem("jwt");
@@ -60,6 +63,11 @@ const Header = ({ isLoggedIn, toggleLogin, user, setUser }: Props) => {
             <Box>
               <Link to="/projects">Projects</Link>
             </Box>
+            {currentView !== "dashboard" && (
+              <Box>
+                <Link to="/dashboard">Dashboard</Link>
+              </Box>
+            )}
             <Menu>
               {({ isOpen }) => (
                 <>
