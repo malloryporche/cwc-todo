@@ -14,6 +14,7 @@ import Dashboard from "./Pages/Dashboard";
 import ProjectsView from "./Pages/ProjectsView";
 import Profile from "./Pages/Profile";
 import axios from "axios";
+import ResetPassword from "./Pages/ResetPassword";
 
 const { ToastContainer, toast } = createStandaloneToast();
 
@@ -50,52 +51,56 @@ const router = createBrowserRouter([
         element: <Register />,
       },
       {
+        path: "/reset-password/:token/:id",
+        element: <ResetPassword />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
+        loader: async () => {
+          const token = localStorage.getItem("jwt");
+          if (token) {
+            try {
+              const response = await axios.get(
+                "http://localhost:3001/profile",
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+              return response.data;
+            } catch (err) {
+              toast({
+                title: "You must be signed in to view this page.",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+              });
+
+              return redirect("/login");
+            }
+          } else {
+            toast({
+              title: "You must be logged in to view this page.",
+              status: "error",
+              duration: 3000,
+              isClosable: true,
+            });
+
+            return redirect("/login");
+          }
+        },
+      },
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
+      },
+      {
         path: "/users/",
         children: [
           {
-            path: "/users/:id/profile",
-            element: <Profile />,
-            loader: async () => {
-              const token = localStorage.getItem("jwt");
-              if (token) {
-                try {
-                  const response = await axios.get(
-                    "http://localhost:3001/profile",
-                    {
-                      headers: {
-                        Authorization: `Bearer ${token}`,
-                      },
-                    }
-                  );
-                  return response.data;
-                } catch (err) {
-                  toast({
-                    title: "You must be signed in to view this page.",
-                    status: "error",
-                    duration: 3000,
-                    isClosable: true,
-                  });
-
-                  return redirect("/login");
-                }
-              } else {
-                toast({
-                  title: "You must be logged in to view this page.",
-                  status: "error",
-                  duration: 3000,
-                  isClosable: true,
-                });
-
-                return redirect("/login");
-              }
-            },
-          },
-          {
-            path: "/users/:id/dashboard",
-            element: <Dashboard />,
-          },
-          {
-            path: "/users/:id/projects",
+            path: "/users/projects",
             element: <ProjectsView />,
           },
         ],

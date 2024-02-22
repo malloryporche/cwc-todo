@@ -16,8 +16,8 @@ import {
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { Link, useNavigate, useOutletContext } from "react-router-dom";
-import { Context, User } from "../../App";
+import { Link, useNavigate } from "react-router-dom";
+import { User } from "../../App";
 
 type Props = {
   isLoggedIn: boolean;
@@ -32,6 +32,9 @@ const Header = ({ isLoggedIn, toggleLogin, user, setUser }: Props) => {
   const navigate = useNavigate();
   const toast = useToast();
   console.log("IS LOGGED IN: ", isLoggedIn);
+
+  const currentView = window.location.pathname.split("/")[1];
+  console.log(currentView);
   const logout = () => {
     toggleLogin();
     localStorage.removeItem("jwt");
@@ -60,6 +63,11 @@ const Header = ({ isLoggedIn, toggleLogin, user, setUser }: Props) => {
             <Box>
               <Link to="/projects">Projects</Link>
             </Box>
+            {currentView !== "dashboard" && (
+              <Box>
+                <Link to="/dashboard">Dashboard</Link>
+              </Box>
+            )}
             <Menu>
               {({ isOpen }) => (
                 <>
@@ -75,13 +83,11 @@ const Header = ({ isLoggedIn, toggleLogin, user, setUser }: Props) => {
                         <MenuItem>
                           <Avatar
                             size="sm"
-                            name={localStorage.getItem("name") || "User"}
+                            name={user?.name || "User"}
                             src="https://bit.ly/kagebunshin"
                             mr={4}
                           ></Avatar>
-                          <Link to={`/users/${user?.id}/profile`}>
-                            Account Settings
-                          </Link>
+                          <Link to={`/profile`}>Account Settings</Link>
                         </MenuItem>
                         <MenuItem onClick={logout}>Logout</MenuItem>
                       </>

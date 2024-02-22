@@ -104,7 +104,7 @@ export default function Register() {
       context.toggleLogin();
       context.setUser(res.data);
       localStorage.setItem("jwt", jwt);
-      navigate(`/users/${res.data.id}/dashboard`, { replace: true });
+      navigate(`/dashboard`, { replace: true });
     } catch (err) {
       console.log(err);
     }

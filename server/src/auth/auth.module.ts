@@ -9,6 +9,7 @@ import { User } from '../user/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import * as dotenv from 'dotenv';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { MailModule } from 'src/mail/mail.module';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ dotenv.config();
   providers: [AuthService, UserService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
   imports: [
+    MailModule,
     TypeOrmModule.forFeature([User]),
     PassportModule,
     JwtModule.register({
