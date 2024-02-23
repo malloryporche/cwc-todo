@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import resetPasswordTemplate from './resetPasswordTemplate';
 import { SENDMAIL } from './mail';
-import { User } from 'src/user/user.entity';
+import { User } from 'src/entities/user.entity';
 import passwordResetNotification from './passwordResetConfirmation';
 
 @Injectable()

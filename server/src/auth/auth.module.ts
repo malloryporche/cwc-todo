@@ -5,7 +5,7 @@ import { UserService } from 'src/user/user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { LocalStrategy } from './strategies/local-strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '../user/user.entity';
+import { User } from '../entities/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import * as dotenv from 'dotenv';
 import { JwtStrategy } from './strategies/jwt.strategy';

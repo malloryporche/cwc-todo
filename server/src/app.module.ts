@@ -10,10 +10,16 @@ import { ListModule } from './list/list.module';
 import { TodoModule } from './todo/todo.module';
 import { MailService } from './mail/mail.service';
 import { MailModule } from './mail/mail.module';
+import { ProjectModule } from './project/project.module';
+import { TagModule } from './tag/tag.module';
 import typeorm from './config/typeorm';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [typeorm],
+    }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) =>
@@ -21,13 +27,11 @@ import typeorm from './config/typeorm';
     }),
     UserModule,
     AuthModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [typeorm],
-    }),
     ListModule,
     TodoModule,
     MailModule,
+    ProjectModule,
+    TagModule,
   ],
   controllers: [AppController],
   providers: [AppService, MailService],

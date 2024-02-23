@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
-export class Todo {
+export class Task {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -12,14 +12,8 @@ export class Todo {
   description: string;
 
   @Column()
-  tag: string;
-
-  @Column()
   dueDate: Date;
 
-  @Column()
-  projectId: number;
-
-  @Column()
+  @Column({ default: false })
   completed: boolean;
 }
