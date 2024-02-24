@@ -12,9 +12,13 @@ const config = {
   password: `${process.env.DB_USER_PASSWORD}`,
   database: `${process.env.DB_NAME}`,
   entities: ['dist/entities/*.entity{.ts,.js}'],
-  migrations: ['src/migrations/*{.ts,.js}'],
+  migrations: ['dist/migrations/*{.ts,.js}'],
   autoLoadEntities: true,
   synchronize: false,
+  compilerOptions: {
+    module: 'CommonJS',
+    moduleResolution: 'node',
+  },
 };
 
 export default registerAs('typeorm', () => config);

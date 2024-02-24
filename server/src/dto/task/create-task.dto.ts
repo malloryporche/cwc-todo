@@ -1,4 +1,10 @@
-import { IsString, IsBoolean, IsNotEmpty, IsDate } from 'class-validator';
+import {
+  IsString,
+  IsBoolean,
+  IsNotEmpty,
+  IsDate,
+  IsOptional,
+} from 'class-validator';
 import * as sanitizeHtml from 'sanitize-html';
 import { Transform } from 'class-transformer';
 
@@ -8,13 +14,15 @@ export class CreateTaskDto {
   @Transform((params) => sanitizeHtml(params.value))
   title: string;
 
+  @IsOptional()
   @IsString()
   @Transform((params) => sanitizeHtml(params.value))
-  description: string;
+  description?: string;
 
+  @IsOptional()
   @IsDate()
-  dueDate: Date;
+  dueDate?: Date;
 
   @IsBoolean()
-  completed: boolean;
+  completed?: boolean = false;
 }
