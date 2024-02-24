@@ -7,12 +7,12 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import UpcomingTaskList from "../Components/Tasks/UpcomingTaskList";
 import ProjectOverview from "../Components/Projects/ProjectOverview";
-import { useParams, useOutletContext } from "react-router-dom";
-import axios from "axios";
+import { useOutletContext } from "react-router-dom";
 import { Context } from "../App";
+import NewProjectModal from "../Components/UI/NewProjectModal";
 
 export interface Task {
   id: number;
@@ -39,10 +39,13 @@ interface User {
 export default function Dashboard() {
   const context = useOutletContext() as Context;
   const user = context.user;
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [projects, setProjects] = useState([]);
   const [tasks, setTasks] = useState([]);
 
+  const toggleIsOpen = () => {
+    setIsModalOpen(!isModalOpen);
+  };
   const upcomingTaskList: Task[] = [
     {
       id: 1,
@@ -79,7 +82,7 @@ export default function Dashboard() {
             Hello {user.name}
           </Heading>
           <Spacer />
-          <Button onClick={() => {}}>
+          <Button onClick={() => toggleIsOpen()}>
             <AddIcon />
           </Button>
         </Flex>
@@ -92,6 +95,8 @@ export default function Dashboard() {
       <UpcomingTaskList upcomingTasks={upcomingTaskList} />
 
       <ProjectOverview projects={projectList} />
+
+      <NewProjectModal isOpen={isModalOpen} onClose={() => toggleIsOpen()} />
     </>
   );
 }
