@@ -6,8 +6,11 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
   UseGuards,
   ValidationPipe,
+  ParseIntPipe,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from '../dto/project/create-project.dto';
@@ -24,14 +27,20 @@ export class ProjectController {
     return this.projectService.create(createProjectDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.projectService.findAll();
+  findAllUserProjects(@Request() req) {
+    return this.projectService.findAll(req);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.projectService.findOne(+id);
+  @UseGuards(JwtAuthGuard)
+  @Get(':id') // GET /project/:id
+  findOne(@Param('id', ParseIntPipe) id: number, @Request() req) {
+    try {
+      return this.projectService.findOne(id, req.user);
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
   }
 
   @Patch(':id')
