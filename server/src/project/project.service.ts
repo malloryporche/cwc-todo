@@ -15,10 +15,7 @@ export class ProjectService {
   ) {}
 
   create(createProjectDto: CreateProjectDto): Promise<Project> {
-    console.log(createProjectDto);
-    const { title, description, dueDate } = createProjectDto;
     const project = this.projectsRepository.save(createProjectDto);
-
     return project;
   }
 
@@ -58,6 +55,6 @@ export class ProjectService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} project`;
+    return this.projectsRepository.delete(id);
   }
 }
