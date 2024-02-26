@@ -17,6 +17,7 @@ import axios from "axios";
 import ResetPassword from "./Pages/ResetPassword";
 
 const { ToastContainer, toast } = createStandaloneToast();
+const token = localStorage.getItem("jwt");
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,6 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <ErrorPage />,
     loader: async () => {
-      const token = localStorage.getItem("jwt");
       if (token) {
         try {
           const response = await axios.get("http://localhost:3001/profile", {
@@ -58,7 +58,6 @@ const router = createBrowserRouter([
         path: "/profile",
         element: <Profile />,
         loader: async () => {
-          const token = localStorage.getItem("jwt");
           if (token) {
             try {
               const response = await axios.get(
@@ -95,6 +94,18 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <Dashboard />,
+        loader: async () => {
+          if (!token) {
+            toast({
+              title: "You must be signed in to view this page.",
+              status: "error",
+              duration: 3000,
+              isClosable: true,
+            });
+            return redirect("/login");
+          }
+          return {};
+        },
       },
       {
         path: "/users/",

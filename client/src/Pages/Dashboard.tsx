@@ -87,7 +87,7 @@ export default function Dashboard() {
           </Button>
         </Flex>
       </Container>
-      <Container p={5} bg={"gray.500"} mb={8} rounded={"2xl"}>
+      <Container p={5} mb={8} rounded={"2xl"}>
         <Text>Today</Text>
         <Heading size={"md"}>2/10 tasks</Heading>
       </Container>

@@ -34,23 +34,18 @@ const icon = <MdOutlineCalendarMonth fontSize="sm" />;
 export const DatePicker = ({ selectedDate, onChange, ...props }: Props) => {
   return (
     <>
-      <InputGroup>
-        <Box
-          zIndex={1800}
-          bgColor={useColorMode().colorMode === "dark" ? "gray.800" : "white"}
-        >
-          <ReactDatePicker
-            selected={selectedDate}
-            onChange={onChange}
-            customInput={<CustomInput />}
-            dateFormat="MMMM d, yyyy h:mm aa"
-            showTimeInput
-            timeInputLabel="Time:"
-            popperPlacement="top-end"
-            {...props}
-          />
-          <InputRightElement children={icon} />
-        </Box>
+      <InputGroup zIndex={1}>
+        <ReactDatePicker
+          selected={selectedDate}
+          onChange={onChange}
+          customInput={<CustomInput />}
+          dateFormat="MMMM d, yyyy h:mm aa"
+          showTimeInput
+          timeInputLabel="Time:"
+          popperPlacement="top-end"
+          {...props}
+        />
+        <InputRightElement children={icon} />
       </InputGroup>
     </>
   );
