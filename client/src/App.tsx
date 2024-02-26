@@ -98,7 +98,17 @@ const App = () => {
     deleteAccount,
   };
 
-  useEffect(() => {}, [user]);
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
+    toast({
+      title: "Your token has expired, please log back in!",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  }, [isLoggedIn]);
   return (
     <>
       <ChakraProvider theme={theme}>
