@@ -21,15 +21,14 @@ import {
   InputLeftElement,
   InputGroup,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import {
-  MdAddComment,
-  MdDateRange,
   MdComment,
   MdOutlineNewLabel,
   MdOutlineNotificationAdd,
-  MdInsertComment,
+  MdOutlineCalendarMonth,
 } from "react-icons/md";
+import { DatePicker } from "./Datepicker";
 
 export default function NewProjectModal({
   isOpen,
@@ -41,12 +40,14 @@ export default function NewProjectModal({
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
 
-  const newProject = {
+  const [date, setDate] = useState(new Date());
+
+  const [newProject, setNewProject] = useState({
     title: "",
     description: "",
-    dueDate: "",
+    dueDate: date,
     completed: false,
-  };
+  });
 
   return (
     <Modal
@@ -78,12 +79,26 @@ export default function NewProjectModal({
             <Input ref={initialRef} placeholder="Project name" />
           </FormControl>
           <FormControl mt={4} display={"flex"}>
-            <Button aria-label="Choose due date" leftIcon={<StarIcon />} mr={3}>
+            <Button
+              aria-label="Choose due date"
+              leftIcon={<StarIcon />}
+              mr={3}
+              onClick={() => setDate}
+            >
               Today
             </Button>
-            <Button aria-label="Add due date" leftIcon={<MdDateRange />}>
-              Tomorrow
-            </Button>
+
+            {/* <Button
+              aria-label="Add due date"
+              leftIcon={<MdOutlineCalendarMonth />}
+            >
+              Choose Date
+            </Button> */}
+            <DatePicker
+              selectedDate={date}
+              onChange={setDate}
+              showPopperArrow={false}
+            />
           </FormControl>
           <FormControl mt={4} display={"flex"}>
             <IconButton
@@ -100,7 +115,7 @@ export default function NewProjectModal({
           </FormControl>
           <FormControl mt={4}>
             <InputGroup>
-              <InputLeftElement pointerEvents="none">
+              <InputLeftElement onClick={() => console.log("clicked")}>
                 <AddIcon color="gray.300" />
               </InputLeftElement>
               <Input placeholder="Add task" />

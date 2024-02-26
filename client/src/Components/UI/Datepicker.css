@@ -1,0 +1,13 @@
+/* .react-datepicker {
+  background-color: inherit !important;
+  color: inherit !important;
+} */
+
+.react-datepicker-popper[data-placement^="bottom"] {
+  margin-top: 0 !important;
+}
+/*
+.react-datepicker__header {
+  background-color: inherit !important;
+  color: inherit !important;
+  border-bottom: none !important;} */
