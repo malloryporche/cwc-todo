@@ -101,13 +101,13 @@ const App = () => {
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/login");
+      toast({
+        title: "Your token has expired, please log back in!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
     }
-    toast({
-      title: "Your token has expired, please log back in!",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
   }, [isLoggedIn]);
   return (
     <>
