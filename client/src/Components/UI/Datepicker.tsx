@@ -1,11 +1,5 @@
 import React, { forwardRef } from "react";
-import {
-  Box,
-  Input,
-  InputGroup,
-  InputRightElement,
-  useColorMode,
-} from "@chakra-ui/react";
+import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 import ReactDatePicker, { ReactDatePickerProps } from "react-datepicker";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import "./Datepicker.css";
