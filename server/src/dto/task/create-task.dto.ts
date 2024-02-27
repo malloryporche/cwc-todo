@@ -1,12 +1,7 @@
-import {
-  IsString,
-  IsBoolean,
-  IsNotEmpty,
-  IsDate,
-  IsOptional,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsEnum } from 'class-validator';
 import * as sanitizeHtml from 'sanitize-html';
 import { Transform } from 'class-transformer';
+import { Status } from 'src/entities/task.entity';
 
 export class CreateTaskDto {
   @IsString()
@@ -20,9 +15,10 @@ export class CreateTaskDto {
   description?: string;
 
   @IsOptional()
-  @IsDate()
-  dueDate?: Date;
+  @IsString()
+  dueDate?: string;
 
-  @IsBoolean()
-  completed?: boolean = false;
+  @IsOptional()
+  @IsEnum(Status)
+  status?: Status;
 }

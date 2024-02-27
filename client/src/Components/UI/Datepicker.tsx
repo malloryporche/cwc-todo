@@ -14,8 +14,8 @@ interface Props {
 const customDateInput = ({ value, onClick, onChange }: any, ref: any) => (
   <Input
     autoComplete="off"
-    value={value}
     ref={ref}
+    value={value}
     onClick={onClick}
     onChange={onChange}
   />
@@ -33,9 +33,7 @@ export const DatePicker = ({ selectedDate, onChange, ...props }: Props) => {
           selected={selectedDate}
           onChange={onChange}
           customInput={<CustomInput />}
-          dateFormat="MMMM d, yyyy h:mm aa"
-          showTimeInput
-          timeInputLabel="Time:"
+          dateFormat="MMMM d, yyyy"
           popperPlacement="top-end"
           {...props}
         />

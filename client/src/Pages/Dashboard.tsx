@@ -10,7 +10,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
 import UpcomingTaskList from "../Components/Tasks/UpcomingTaskList";
 import ProjectOverview from "../Components/Projects/ProjectOverview";
-import { useOutletContext } from "react-router-dom";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 import { Context } from "../App";
 import NewProjectModal from "../Components/UI/NewProjectModal";
 
@@ -37,6 +37,8 @@ interface User {
 }
 
 export default function Dashboard() {
+  const data = useLoaderData() as Project | undefined;
+  console.log(data);
   const context = useOutletContext() as Context;
   const user = context.user;
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -74,6 +76,17 @@ export default function Dashboard() {
     },
   ];
 
+  const createTask = (e: React.FormEvent, task: Task) => {
+    e.preventDefault();
+  };
+
+  const todaysDate = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+
   return (
     <>
       <Container mb={8}>
@@ -88,7 +101,7 @@ export default function Dashboard() {
         </Flex>
       </Container>
       <Container p={5} mb={8} rounded={"2xl"}>
-        <Text>Today</Text>
+        <Text>{todaysDate}</Text>
         <Heading size={"md"}>2/10 tasks</Heading>
       </Container>
 

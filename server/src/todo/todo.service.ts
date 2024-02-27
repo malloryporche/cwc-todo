@@ -25,7 +25,7 @@ export class TodoService {
     const todo = new Todo();
     todo.title = createTodoDto.title;
     todo.description = createTodoDto.description;
-    todo.dueDate = createTodoDto.dueDate;
+    todo.dueDate = new Date(createTodoDto.dueDate) || null;
     todo.project = project;
 
     return this.todosRepository.save(todo);

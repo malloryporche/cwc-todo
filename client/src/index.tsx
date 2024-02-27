@@ -71,7 +71,7 @@ const router = createBrowserRouter([
               return response.data;
             } catch (err) {
               toast({
-                title: "You must be signed in to view this page.",
+                title: `Error loading profile.`,
                 status: "error",
                 duration: 3000,
                 isClosable: true,
@@ -95,7 +95,21 @@ const router = createBrowserRouter([
         path: "/dashboard",
         element: <Dashboard />,
         loader: async () => {
-          if (!token) {
+          if (token) {
+            try {
+              const response = await axios.get(
+                "http://localhost:3001/projects",
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+              return response.data;
+            } catch {
+              return {};
+            }
+          } else if (!token) {
             toast({
               title: "You must be signed in to view this page.",
               status: "error",

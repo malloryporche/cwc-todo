@@ -17,14 +17,19 @@ import { CreateProjectDto } from '../dto/project/create-project.dto';
 import { UpdateProjectDto } from '../dto/project/update-project.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
-@Controller('project')
+@Controller('projects')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body(ValidationPipe) createProjectDto: CreateProjectDto) {
-    return this.projectService.create(createProjectDto);
+  create(
+    @Body(ValidationPipe) createProjectDto: CreateProjectDto,
+    @Request() req,
+  ) {
+    const id = req.user.id;
+    console.log(id);
+    return this.projectService.create(createProjectDto, id);
   }
 
   @UseGuards(JwtAuthGuard)
