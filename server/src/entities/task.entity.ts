@@ -20,7 +20,7 @@ export class Task {
   @Column({ nullable: true })
   description: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'date', nullable: true })
   dueDate: Date;
 
   @Column({ type: 'enum', enum: Status, default: Status.NOT_STARTED })
