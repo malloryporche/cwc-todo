@@ -5,6 +5,8 @@ import { Tag } from './tag.entity';
 
 @Entity()
 export class Todo extends Task {
+  position: number;
+
   @ManyToOne(() => Project, (project) => project.todos)
   project: Project;
 
