@@ -28,14 +28,13 @@ export class ProjectController {
     @Request() req,
   ) {
     const id = req.user.id;
-    console.log(id);
     return this.projectService.create(createProjectDto, id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
   findAllUserProjects(@Request() req) {
-    return this.projectService.findAll(req);
+    return this.projectService.findAllActive(req);
   }
 
   @UseGuards(JwtAuthGuard)

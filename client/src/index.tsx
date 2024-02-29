@@ -15,6 +15,7 @@ import ProjectsView from "./Pages/ProjectsView";
 import Profile from "./Pages/Profile";
 import axios from "axios";
 import ResetPassword from "./Pages/ResetPassword";
+import ProjectView from "./Pages/ProjectView";
 
 const { ToastContainer, toast } = createStandaloneToast();
 const token = localStorage.getItem("jwt");
@@ -106,8 +107,14 @@ const router = createBrowserRouter([
                 }
               );
               return response.data;
-            } catch {
-              return {};
+            } catch (err) {
+              toast({
+                title: `Error loading projects.`,
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+              });
+              return redirect("/login");
             }
           } else if (!token) {
             toast({
@@ -118,15 +125,33 @@ const router = createBrowserRouter([
             });
             return redirect("/login");
           }
-          return {};
         },
       },
       {
-        path: "/users/",
+        path: "/projects/",
         children: [
           {
-            path: "/users/projects",
-            element: <ProjectsView />,
+            path: "/projects/:projectID",
+            element: <ProjectView />,
+            loader: async ({ params }) => {
+              if (token) {
+                try {
+                  const response = await axios.get(
+                    "http://localhost:3001/projects/" + params.projectID,
+                    {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    }
+                  );
+                  return response.data;
+                } catch {
+                  return {};
+                }
+              }
+
+              return {};
+            },
           },
         ],
       },

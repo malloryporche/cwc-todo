@@ -22,12 +22,12 @@ export class TodoController {
   @Post()
   create(@Body() createTodoDto: CreateTodoDto, @Request() req) {
     const { projectId } = createTodoDto;
-    return this.todoService.create(createTodoDto, projectId, req.user);
+    return this.todoService.create(createTodoDto, projectId, req.user.id);
   }
 
   @Get()
-  findAll() {
-    return this.todoService.findAll();
+  findAll(@Request() req) {
+    return this.todoService.findAllUserTasks(req.user);
   }
 
   @Get(':id')
@@ -37,6 +37,7 @@ export class TodoController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
+    console.log(updateTodoDto);
     return this.todoService.update(+id, updateTodoDto);
   }
 

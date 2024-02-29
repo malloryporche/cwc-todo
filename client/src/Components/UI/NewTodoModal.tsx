@@ -25,11 +25,15 @@ import {
 } from "react-icons/md";
 import { DatePicker } from "./Datepicker";
 import axios from "axios";
+import { Project } from "../../Pages/Dashboard";
+import { useRevalidator } from "react-router-dom";
 
-export default function NewProjectModal({
+export default function NewTodoModal({
+  project,
   isOpen,
   onClose,
 }: {
+  project: Project;
   isOpen: boolean;
   onClose: () => void;
 }) {
@@ -40,7 +44,7 @@ export default function NewProjectModal({
   const [date, setDate] = useState(new Date());
   const [showDescription, setShowDescription] = useState(false);
   const [showAddTask, setShowAddTask] = useState(false);
-
+  const revalidate = useRevalidator();
   const toggleView = (
     state: any,
     setState: React.Dispatch<React.SetStateAction<any>>
@@ -48,44 +52,35 @@ export default function NewProjectModal({
     setState(!state);
   };
 
-  const [newProject, setNewProject] = useState({
-    title: "",
-    description: "",
-    completed: false,
-  });
-
-  const [tasks, setTasks] = useState([]);
-
+  const [tasks, setTasks] = useState(project.todos);
   const [newTask, setNewTask] = useState({
     title: "",
+    description: "",
   });
 
   const resetModalView = () => {
-    setNewProject({
-      title: "",
-      description: "",
-      completed: false,
-    });
     setDate(new Date());
     setNewTask({
       title: "",
+      description: "",
     });
     setShowDescription(false);
     setDate(new Date());
     setShowAddTask(false);
   };
 
-  const createNewProject = (e: React.FormEvent) => {
+  const createNewTask = (e: React.FormEvent) => {
     e.preventDefault();
     onClose();
-    console.log("NEW PROJECT IS ", newProject);
+    console.log("NEW TASK IS ", newTask);
     axios
       .post(
-        "http://localhost:3001/projects",
+        "http://localhost:3001/todo",
         {
-          title: newProject.title,
-          description: newProject.description,
+          title: newTask.title,
+          description: newTask.description,
           dueDate: date,
+          projectId: project?.id,
         },
         {
           headers: {
@@ -94,9 +89,10 @@ export default function NewProjectModal({
         }
       )
       .then((res) => {
-        console.log(res.data);
+        setTasks((prev) => [...prev, res.data]);
+        revalidate.revalidate();
         toast({
-          title: `${newProject.title} created!`,
+          title: `${newTask.title} created!`,
           status: "success",
           duration: 3000,
           isClosable: true,
@@ -106,17 +102,13 @@ export default function NewProjectModal({
       .catch((err) => {
         console.error(err);
         toast({
-          title: `${err} creating project.`,
+          title: `${err} creating task.`,
           description: "Something went wrong. Please try again.",
           status: "error",
           duration: 3000,
           isClosable: true,
         });
       });
-  };
-
-  const createNewTask = (e: React.FormEvent) => {
-    e.preventDefault();
   };
 
   return (
@@ -147,7 +139,7 @@ export default function NewProjectModal({
             <IconButton
               aria-label="Save project"
               icon={<CheckIcon />}
-              onClick={(e) => createNewProject(e)}
+              onClick={(e) => createNewTask(e)}
             />
           </Box>
         </ModalHeader>
@@ -155,10 +147,10 @@ export default function NewProjectModal({
           <FormControl>
             <Input
               ref={initialRef}
-              placeholder="Project name"
-              value={newProject.title}
+              placeholder="Task name"
+              value={newTask.title}
               onChange={(e) =>
-                setNewProject({ ...newProject, title: e.target.value })
+                setNewTask({ ...newTask, title: e.target.value })
               }
             />
           </FormControl>
@@ -166,10 +158,10 @@ export default function NewProjectModal({
             <FormControl mt={4}>
               <Input
                 ref={initialRef}
-                placeholder="Add a project description"
-                value={newProject.description}
+                placeholder="Add a description"
+                value={newTask.description}
                 onChange={(e) =>
-                  setNewProject({ ...newProject, description: e.target.value })
+                  setNewTask({ ...newTask, description: e.target.value })
                 }
               />
             </FormControl>
@@ -227,11 +219,7 @@ export default function NewProjectModal({
         </ModalBody>
 
         <ModalFooter>
-          <Button
-            colorScheme="blue"
-            mr={3}
-            onClick={(e) => createNewProject(e)}
-          >
+          <Button colorScheme="blue" mr={3} onClick={(e) => createNewTask(e)}>
             Save
           </Button>
           <Button onClick={onClose}>Cancel</Button>
@@ -239,7 +227,4 @@ export default function NewProjectModal({
       </ModalContent>
     </Modal>
   );
-}
-function toast(arg0: {}) {
-  throw new Error("Function not implemented.");
 }

@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
+import {
+  Outlet,
+  useLoaderData,
+  useNavigate,
+  useRevalidator,
+} from "react-router-dom";
 import Header from "./Components/UI/Header";
 import {
   ChakraProvider,
@@ -29,6 +34,12 @@ export type Context = {
   setUser: (user: User) => void;
   updateUserData: (id: number, key: string, value: string | boolean) => void;
   deleteAccount: () => void;
+  updateTaskData: (
+    id: number,
+    type: string,
+    key: string,
+    value: string | boolean
+  ) => void;
 };
 
 const App = () => {
@@ -37,6 +48,7 @@ const App = () => {
   const [user, setUser] = useState(data);
   const toast = useToast();
   const navigate = useNavigate();
+  const revalidate = useRevalidator();
 
   const toggleLogin = () => {
     setIsLoggedIn(!isLoggedIn);
@@ -54,6 +66,7 @@ const App = () => {
         }
       )
       .then((res) => {
+        revalidate.revalidate();
         console.log(res);
       })
       .catch((err) => {
@@ -61,6 +74,31 @@ const App = () => {
       });
   };
 
+  const updateTaskData = (
+    id: number,
+    type: string,
+    key: string,
+    value: string | boolean
+  ) => {
+    axios
+      .patch(
+        `http://localhost:3001/${type}/${id}/`,
+        { [key]: value },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+          },
+        }
+      )
+      .then((res) => {
+        revalidate.revalidate();
+        console.log(`http://localhost:3001/${type}/${id}/`);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const deleteAccount = () => {
     axios
       .delete("http://localhost:3001/users/" + user?.id, {
@@ -84,6 +122,7 @@ const App = () => {
         console.error(err);
       });
   };
+
   const context: Context = {
     isLoggedIn,
     toggleLogin,
@@ -96,6 +135,7 @@ const App = () => {
     setUser,
     updateUserData,
     deleteAccount,
+    updateTaskData,
   };
 
   useEffect(() => {

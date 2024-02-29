@@ -2,10 +2,13 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateProjectDto } from '../dto/project/create-project.dto';
 import { UpdateProjectDto } from '../dto/project/update-project.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import { Project } from '../entities/project.entity';
 import { User } from '../entities/user.entity';
 import { UserService } from 'src/user/user.service';
+import { Status } from '../entities/task.entity';
+import { Todo } from 'src/entities/todo.entity';
+import { TodoService } from 'src/todo/todo.service';
 
 @Injectable()
 export class ProjectService {
@@ -15,6 +18,8 @@ export class ProjectService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private userService: UserService,
+    @InjectRepository(Todo)
+    private todosRepository: Repository<Todo>,
   ) {}
 
   async create(
@@ -40,14 +45,26 @@ export class ProjectService {
     return savedProject;
   }
 
-  async findAll(req): Promise<Project[]> {
+  async findAllActive(
+    req,
+  ): Promise<{ projects: Project[]; activeTasks: Todo[] }> {
     const user = req.user;
     if (user) {
       const projects = await this.projectsRepository.find({
-        where: { user: { id: user.id } },
+        where: { user: { id: user.id }, status: Not(In([Status.COMPLETED])) },
+        order: { dueDate: 'ASC' },
         relations: ['todos'],
       });
-      return projects;
+      projects.forEach((project) => {
+        project.todos = project.todos.sort((a, b) => a.position - b.position);
+      });
+
+      const activeTasks = await this.todosRepository.find({
+        where: { user: { id: user.id }, status: Not(In([Status.COMPLETED])) },
+        order: { dueDate: 'ASC' },
+        relations: ['project'],
+      });
+      return { projects: [...projects], activeTasks: [...activeTasks] };
     } else {
       throw new UnauthorizedException({});
     }
@@ -56,6 +73,7 @@ export class ProjectService {
   async findOne(id: number, user): Promise<Project> {
     const project = await this.projectsRepository.findOne({
       where: { id, user: { id: user.id } },
+      relations: ['todos'],
     });
     if (project) {
       return project;

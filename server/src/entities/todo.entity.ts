@@ -9,6 +9,7 @@ import {
 import { Project } from './project.entity';
 import { Task } from './task.entity';
 import { Tag } from './tag.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Todo extends Task {
@@ -22,4 +23,7 @@ export class Todo extends Task {
   @ManyToMany(() => Tag, (tag) => tag.todos)
   @JoinTable({ name: 'todo_tags' })
   tags: Tag[];
+
+  @ManyToOne(() => User, (user) => user.todos)
+  user: User;
 }

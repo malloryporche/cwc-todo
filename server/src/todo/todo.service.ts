@@ -5,6 +5,7 @@ import { Todo } from 'src/entities/todo.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProjectService } from 'src/project/project.service';
+import { User } from 'src/entities/user.entity';
 
 @Injectable()
 export class TodoService {
@@ -12,9 +13,15 @@ export class TodoService {
     @InjectRepository(Todo)
     private readonly todosRepository: Repository<Todo>,
     private readonly projectsService: ProjectService,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
   ) {}
-  async create(createTodoDto: CreateTodoDto, projectId: number, user: number) {
-    const project = await this.projectsService.findOne(projectId, user);
+  async create(
+    createTodoDto: CreateTodoDto,
+    projectId: number,
+    userId: number,
+  ) {
+    const project = await this.projectsService.findOne(projectId, userId);
 
     if (!project) {
       throw new UnauthorizedException({
@@ -22,25 +29,51 @@ export class TodoService {
       });
     }
 
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException({ message: 'No user with that id' });
+    }
+
+    const { dueDate } = createTodoDto;
     const todo = new Todo();
     todo.title = createTodoDto.title;
     todo.description = createTodoDto.description;
-    todo.dueDate = new Date(createTodoDto.dueDate) || null;
+    todo.status = createTodoDto.status;
+    todo.user = user;
     todo.project = project;
 
-    return this.todosRepository.save(todo);
+    if (dueDate) {
+      todo.dueDate = new Date(createTodoDto.dueDate);
+    }
+
+    const savedTodo = await this.todosRepository.save(todo);
+    return savedTodo;
   }
 
-  findAll() {
-    return `This action returns all todo`;
+  findAllUserTasks(userId: number) {
+    return this.todosRepository.find({
+      where: { user: { id: userId } },
+      order: { dueDate: 'ASC' },
+    });
   }
 
   findOne(id: number) {
     return `This action returns a #${id} todo`;
   }
 
-  update(id: number, updateTodoDto: UpdateTodoDto) {
-    return `This action updates a #${id} todo`;
+  async update(id: number, updateTodoDto: UpdateTodoDto) {
+    const task = await this.todosRepository.findOne({
+      where: { id },
+    });
+    const udpatedTask = this.todosRepository.save({
+      ...task,
+      ...updateTodoDto,
+    });
+
+    return udpatedTask;
   }
 
   remove(id: number) {

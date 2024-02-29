@@ -16,15 +16,16 @@ import NewProjectModal from "../Components/UI/NewProjectModal";
 
 export interface Task {
   id: number;
-  name: string;
+  title: string;
   dueDate: string;
 }
 
 export interface Project {
   id: number;
-  name: string;
-  deadline: Date;
-  nextTask: Task;
+  title: string;
+  dueDate: Date;
+  status: ["Not Started", "In Progress", "Completed"];
+  todos: Task[];
 }
 
 interface User {
@@ -36,45 +37,26 @@ interface User {
   darkMode: boolean;
 }
 
+interface ActiveProjectsData {
+  projects: Project[];
+  activeTasks: Task[];
+}
+
 export default function Dashboard() {
-  const data = useLoaderData() as Project | undefined;
-  console.log(data);
+  const projectData = useLoaderData() as ActiveProjectsData;
+  console.log(projectData);
+  const activeProjects = projectData.projects as Project[];
+  const taskData = projectData.activeTasks as Task[];
   const context = useOutletContext() as Context;
   const user = context.user;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [projects, setProjects] = useState([]);
-  const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState(activeProjects);
+  const [tasks, setTasks] = useState(taskData);
 
+  console.log("tasks are: ", tasks);
   const toggleIsOpen = () => {
     setIsModalOpen(!isModalOpen);
   };
-  const upcomingTaskList: Task[] = [
-    {
-      id: 1,
-      name: "Task 1",
-      dueDate: "2022-01-01",
-    },
-    {
-      id: 2,
-      name: "Task 2",
-      dueDate: "2022-01-02",
-    },
-  ];
-
-  const projectList: Project[] = [
-    {
-      id: 1,
-      name: "Project 1",
-      deadline: new Date("2022-01-01"),
-      nextTask: upcomingTaskList[0],
-    },
-    {
-      id: 2,
-      name: "Project 2",
-      deadline: new Date("2022-01-01"),
-      nextTask: upcomingTaskList[0],
-    },
-  ];
 
   const createTask = (e: React.FormEvent, task: Task) => {
     e.preventDefault();
@@ -105,9 +87,9 @@ export default function Dashboard() {
         <Heading size={"md"}>2/10 tasks</Heading>
       </Container>
 
-      <UpcomingTaskList upcomingTasks={upcomingTaskList} />
+      <UpcomingTaskList upcomingTasks={tasks} />
 
-      <ProjectOverview projects={projectList} />
+      <ProjectOverview projects={projects} />
 
       <NewProjectModal isOpen={isModalOpen} onClose={() => toggleIsOpen()} />
     </>
